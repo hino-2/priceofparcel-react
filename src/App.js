@@ -1,24 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import YMap from './components/Map'
+import { useSelector, useDispatch } from "react-redux";
+import { layoutMobile, layoutDesktop } from './actions'
 
 function App() {
+  const isMobile = useSelector(state => state.isMobile)
+  const dispatch = useDispatch()
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <div className="left-panel">
+        hello, {isMobile ? 'i am mobile' : 'i am desktop'}
+        <button onClick={() => dispatch(layoutMobile())}>MOBILE</button>
+        <button onClick={() => dispatch(layoutDesktop())}>DESKTOP</button>
+      </div>
+      <div className="map">
+        <YMap />
+      </div>
+
     </div>
   );
 }
