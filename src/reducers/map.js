@@ -1,12 +1,12 @@
-const mapReducer = (state = true, action) => {
+const ecomReducer = (state = false, action) => {
     switch (action.type) {
-        case "SHOW_MAP":
+        case "SHOW_ECOM":
             return true
-        case "HIDE_MAP":
+        case "HIDE_ECOM":
             return false
         default:
             return state
     }
 }
 
-export default mapReducer;
+export default ecomReducer;

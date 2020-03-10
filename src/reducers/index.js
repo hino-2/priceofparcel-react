@@ -1,10 +1,10 @@
 import mobileReducer from './isMobile'
-import mapReducer from './map'
+import ecomReducer from './map'
 import {combineReducers} from 'redux'
 
 const allReducers = combineReducers({
     isMobile: mobileReducer,
-    isMapShown: mapReducer
+    isEcomShown: ecomReducer
 })
 
 export default allReducers
