@@ -1,4 +1,4 @@
-const mobileReducer = (state = false, action) => {
+const isMobileReducer = (state = false, action) => {
     switch (action.type) {
         case "MOBILE":
             return true
@@ -9,4 +9,4 @@ const mobileReducer = (state = false, action) => {
     }
 }
 
-export default mobileReducer;
+export default isMobileReducer;

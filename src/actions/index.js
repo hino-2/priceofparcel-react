@@ -21,3 +21,23 @@ export const hideECOM = () => {
         type: "HIDE_ECOM"
     }
 }
+
+export const getEcomPvzFromFile = () => {
+    return {
+        type: "GET_ECOM_FROM_FILE"
+    }
+}
+
+export const addPlacemark = (placemark) => {
+    return {
+        type: "ADD",
+        data: placemark
+    }
+}
+
+export const removePlacemark = (placemark) => {
+    return {
+        type: "REM",
+        data: placemark
+    }
+}

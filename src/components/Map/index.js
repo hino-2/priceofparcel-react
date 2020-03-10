@@ -3,74 +3,84 @@ import { YMaps, Map, ObjectManager } from 'react-yandex-maps'
 import { useSelector } from "react-redux";
 
 function YMap () {
-    // let ecomPVZfile = []
-    
-    const getEcomPVZfromFile = file => {
+    let ecomPVZfile = useRef([])
+    let ecomPVZ = useRef([])
+    const isEcomShown = useSelector(state => state.isEcomShown)
+    const PVZ = useSelector(state => state.placemarks)
+
+    const getEcomPVZfromFile = async(file) => {
         let ecomCollection = {
             type: "FeatureCollection",
             features: []
         }
-        fetch(file).then((r) => r.json())
-        .then((data) => {
-            data.forEach(val => {
-                // console.log(val);
-                let index = val["postal-code"] ? val["postal-code"] : val["address"]["index"],
-                    latitude = parseFloat(val["latitude"]),
-                    longitude = parseFloat(val["longitude"]),
-                    logo, icon,
-                    brand = val["brand-name"] ? val["brand-name"] : "Почта России",
-                    desc = val["getto"] ? "<br/>" + val["getto"] : "",
-                    address = getAddress(val),
-                    worktime = getWorkTime(val)
-                
-                let a = logoAndIcon(brand)
-                logo = a[0]
-                icon = a[1]
+        let response = await fetch(file)
+        let data = await response.json()
+        data.forEach(val => {
+            // console.log(JSON.stringify(val));
+            let index = val["postal-code"] ? val["postal-code"] : val["address"]["index"],
+                latitude = parseFloat(val["latitude"]),
+                longitude = parseFloat(val["longitude"]),
+                logo, icon,
+                brand = val["brand-name"] ? val["brand-name"] : "Почта России",
+                desc = val["getto"] ? "<br/>" + val["getto"] : "",
+                address = getAddress(val),
+                worktime = getWorkTime(val)
+            
+            let a = logoAndIcon(brand)
+            logo = a[0]
+            icon = a[1]
 
-                let balloonContentHeader = getBalloonContentHeader(logo, index, brand),
-                    balloonContentBody = getBalloonContentBody(address, desc),
-                    balloonContentFooter = getBalloonContentFooter(worktime, index, address),
-                    hintContent = getHintContent(logo, index, brand, address)
-                
-                balloonContentFooter = val['is-temporary-closed'] ? 
-                    balloonContentFooter + '<br/><font size="3">Временно закрыто</font>' : balloonContentFooter
+            let balloonContentHeader = getBalloonContentHeader(logo, index, brand),
+                balloonContentBody = getBalloonContentBody(address, desc),
+                balloonContentFooter = getBalloonContentFooter(worktime, index, address),
+                hintContent = getHintContent(logo, index, brand, address)
+            
+            balloonContentFooter = val['is-temporary-closed'] ? 
+                balloonContentFooter + '<br/><font size="3">Временно закрыто</font>' : balloonContentFooter
 
-                let yaObject = {
-                    type: "Feature",
-                    id: index,
-                    geometry: {
-                        type: "Point",
-                        coordinates: [latitude, longitude]
-                    },
-                    properties: {
-                        index: index,
-                        balloonContentHeader: balloonContentHeader,
-                        balloonContentBody: balloonContentBody,
-                        balloonContentFooter: balloonContentFooter,
-                        hintContent: hintContent
-                    },
-                    options: {
-                        hintPane: 'hint',
-                        iconLayout: 'default#image',
-                        iconImageHref: icon,
-                        iconImageSize: [32, 32],
-                        iconImageOffset: [-16, -16]
-                    }
+            let yaObject = {
+                type: "Feature",
+                id: index,
+                geometry: {
+                    type: "Point",
+                    coordinates: [latitude, longitude]
+                },
+                properties: {
+                    index: index,
+                    balloonContentHeader: balloonContentHeader,
+                    balloonContentBody: balloonContentBody,
+                    balloonContentFooter: balloonContentFooter,
+                    hintContent: hintContent
+                },
+                options: {
+                    hintPane: 'hint',
+                    iconLayout: 'default#image',
+                    iconImageHref: icon,
+                    iconImageSize: [32, 32],
+                    iconImageOffset: [-16, -16]
                 }
-                ecomCollection.features.push(yaObject)
-            })
-            // console.log(ecomCollection.features);
-            console.log(4);
-            // ecomPVZfile = ecomCollection.features
-            return ecomCollection.features
+            }
+            ecomCollection.features.push(yaObject)
+            // console.log(JSON.stringify(yaObject));
         })
-        .catch(() => console.log('no ECOM pvz file found'))
+        // console.log(ecomCollection.features);
+        // console.log(4);
+        return ecomCollection.features
     }
-    const [ecomPVZfile, setEcomPVZfile] = useState(() => {
-        const initialState = getEcomPVZfromFile('/ecom/pvz.json')
-        return initialState
-    })
-    
+    // let [ecomPVZfile, ] = useState(async() => {
+    //     let initialState = await getEcomPVZfromFile('/ecom/pvz.json')
+    //     // console.log(initialState);
+    //     ecomPVZfile.then(data => ecomPVZ.current = data)
+    //     return initialState
+    // })
+    // useEffect(() => {
+    //     async function pvz() {
+    //         ecomPVZfile.current = await getEcomPVZfromFile('/ecom/pvz.json')
+    //         ecomPVZfile.current.then(data => ecomPVZ.current = data)
+    //     }
+    //     pvz()
+    // }, [isEcomShown])
+    getEcomPVZfromFile('/ecom/pvz.json')
     // const [ecomPVZshown, setEcomPVZshown] = useState(false)
     const [mapState, setMapState] = useState({ 
         center: [56.8519, 60.6122], 
@@ -78,25 +88,12 @@ function YMap () {
         controls: ['zoomControl', 'fullscreenControl', 'searchControl']
     })
 
-    const isEcomShown = useSelector(state => state.isEcomShown)
-    let ecomPVZ = useRef([])
+    
+    // let ecomPVZ = useRef([])
        
     useEffect(() => {
-        console.log(5, isEcomShown, ecomPVZfile, ecomPVZ);
-        if(ecomPVZfile) {
-            if(ecomPVZfile.length > 0) {
-                console.log(11, ecomPVZfile.length)
-                ecomPVZ.current = isEcomShown ? ecomPVZfile : []
-                console.log(6, isEcomShown, ecomPVZfile.length, ecomPVZ);
-            } else {
-                setTimeout(() => {
-                    console.log(12, ecomPVZfile.length)
-                    ecomPVZ.current = isEcomShown ? ecomPVZfile : []
-                    console.log(6, isEcomShown, ecomPVZfile.length, ecomPVZ);
-                }, 2000)
-            }
-        }
-    
+        console.log(5, isEcomShown, ecomPVZ);
+            
     })
 
     const getSafe = fn => {
@@ -269,7 +266,7 @@ function YMap () {
                     clusters={{
                         preset: 'islands#blueClusterIcons',
                     }}
-                    features={ ecomPVZ.current }
+                    features={ PVZ }
                 />
             </Map>
         </YMaps>

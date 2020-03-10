@@ -1,10 +1,14 @@
-import mobileReducer from './isMobile'
-import ecomReducer from './map'
+import isMobileReducer from './isMobile'
+import isEcomShownReducer from './isEcomShown'
+import getEcomPvzFromFileReducer from './getEcomPvz'
+import placemarkReducer from './placemarkReducer'
 import {combineReducers} from 'redux'
 
 const allReducers = combineReducers({
-    isMobile: mobileReducer,
-    isEcomShown: ecomReducer
+    isMobile: isMobileReducer,
+    isEcomShown: isEcomShownReducer,
+    ecomPvz: getEcomPvzFromFileReducer,
+    placemarks: placemarkReducer,
 })
 
 export default allReducers
