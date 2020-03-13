@@ -1,4 +1,4 @@
-const isEcomShownReducer = (state = false, action) => {
+const showEcomReducer = (state = false, action) => {
     switch (action.type) {
         case "SHOW_ECOM":
             return true
@@ -9,4 +9,4 @@ const isEcomShownReducer = (state = false, action) => {
     }
 }
 
-export default isEcomShownReducer
+export default showEcomReducer

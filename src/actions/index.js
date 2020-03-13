@@ -22,9 +22,10 @@ export const hideECOM = () => {
     }
 }
 
-export const getEcomPvzFromFile = () => {
+export const getEcomPvzFromFileAction = (pvz) => {
     return {
-        type: "GET_ECOM_FROM_FILE"
+        type: "GET_ECOM_FROM_FILE",
+        data: pvz
     }
 }
 
