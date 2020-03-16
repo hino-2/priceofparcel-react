@@ -1,26 +1,25 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { YMaps, Map, ObjectManager } from 'react-yandex-maps' 
 import { useSelector } from "react-redux";
+import './style.scss'
 
 function YMap () {
     const showEcom   = useSelector(state => state.showEcom)
     const ecomPvz    = useSelector(state => state.ecomPvz)
-    var   placemarks = useSelector(state => state.placemarks)
+    let   placemarks = useSelector(state => state.placemarks)
     let   PVZ        = []
 
     PVZ = showEcom ? [...placemarks, ...ecomPvz] : placemarks
-    console.log(PVZ);
+    console.log(PVZ)
     
+
     const [mapState, setMapState] = useState({ 
         center: [56.8519, 60.6122], 
         zoom: 4,
         controls: ['zoomControl', 'fullscreenControl', 'searchControl']
     })
 
-    
-    // let ecomPVZ = useRef([])
-       
- 
+    //setMapState(newMapState)              // TODO: detect city
     
     const init = (ymaps) => {
         ymaps.container.fitToViewport()
@@ -35,7 +34,8 @@ function YMap () {
         <YMaps onLoad={ymaps => init(ymaps)}
             query={{
                 ns: 'use-load-option',
-                load: 'Map,Placemark,ObjectManager,Clusterer,control.SearchControl,control.ZoomControl,control.FullscreenControl,geoObject.addon.balloon',
+                // load: 'Map,Placemark,ObjectManager,objectManager.Balloon,Clusterer,control.SearchControl,control.ZoomControl,control.FullscreenControl,geoObject.addon.balloon',
+                load: 'package.full',
                 apikey: 'bdfba964-3a7d-481c-bef0-29c68a58f464',
                 lang: 'ru_RU'
             }}>

@@ -53,8 +53,6 @@ const getEcomPVZfromFile = async(file) => {
         ecomCollection.features.push(yaObject)
         // console.log(JSON.stringify(yaObject));
     })
-    // console.log(ecomCollection.features);
-    // console.log(4);
     return ecomCollection.features
 }
 
@@ -65,7 +63,6 @@ const getSafe = fn => {
         } else {
             return "";
         }
-        // return fn();
     } catch (e) {
         return "";
     }

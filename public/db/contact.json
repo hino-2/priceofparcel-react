@@ -1,0 +1,9 @@
+[
+{"type":"header","version":"4.9.2","comment":"Export to JSON plugin for PHPMyAdmin"},
+{"type":"database","name":"priceparcel"},
+{"type":"table","name":"contact","database":"priceparcel","data":
+[
+{"phone":"7 (922) 149 37 38","card":"5321 3040 3016 0433","message":"В планах:<br\/><ul><li>Добавить другие службы доставки: СДЭК, Boxberry, DPD.<\/li><li>Добавить правильную поддержку всех браузеров.<\/li><li>Добавить красивую поддержку версии для смартфонов.<\/li><li>Добавить отслеживание посылки.<\/li><\/ul> <br\/>Средства пойдут на поддержание и развитие проекта, оплату домена, хостинга, подсказок DaData и т.п.","id":"0"}
+]
+}
+]

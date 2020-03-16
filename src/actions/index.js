@@ -42,3 +42,17 @@ export const removePlacemark = (placemark) => {
         data: placemark
     }
 }
+
+export const loadCompany = (company) => {
+    return {
+        type: "LOAD_COMPANY",
+        data: company
+    }
+}
+
+export const loadService = (service) => {
+    return {
+        type: "LOAD_SERVICE",
+        data: service
+    }
+}
