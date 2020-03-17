@@ -50,9 +50,9 @@ export const loadCompany = (company) => {
     }
 }
 
-export const loadService = (service) => {
+export const loadUsluga = (usluga) => {
     return {
-        type: "LOAD_SERVICE",
-        data: service
+        type: "LOAD_USLUGA",
+        data: usluga
     }
 }

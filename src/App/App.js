@@ -3,9 +3,10 @@ import './App.scss';
 import YMap from '../components/Map'
 import Title from '../components/Title'
 import CompanyList from '../components/CompanyList'
-import { Usluga } from "../components/Usluga";
+import Usluga from "../components/Usluga";
+import Params from "../components/Params";
 import { useDispatch } from "react-redux";
-import { layoutMobile, layoutDesktop, showECOM, hideECOM, getEcomPvzFromFileAction, addPlacemark, } from '../actions'
+import { layoutMobile, layoutDesktop, getEcomPvzFromFileAction } from '../actions'
 import getEcomPvzFromFile from '../utils/getEcomPvzFromFile'
 
 function App() {
@@ -28,16 +29,14 @@ function App() {
         <div className="usluga">
           <CompanyList />
           <Usluga />
-        </div>
-
-        <div>
           <img id="help_main" src="img/question-circle-o.svg" style={{"cursor": "pointer"}} alt="Помощь"/>
         </div>
-        <div>
+        <Params />
+        {/* <div>
           <button onClick={() => dispatch(showECOM())}>show ecom</button>
           <button onClick={() => dispatch(hideECOM())}>hide ecom</button>
           <button onClick={() => dispatch(addPlacemark(testPlacemark))}>add test placemark</button>
-        </div>
+        </div> */}
       </div>
       <div className="map">
         <YMap />

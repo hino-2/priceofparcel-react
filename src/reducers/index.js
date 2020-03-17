@@ -3,7 +3,7 @@ import showEcomReducer from './showEcom'
 import getEcomPvzFromFileReducer from './getEcomPvz'
 import placemarkReducer from './placemarkReducer'
 import loadCompanyReducer from './loadCompanyReducer'
-import loadServiceReducer from './loadServiceReducer'
+import loadUslugaReducer from './loadUslugaReducer'
 import {combineReducers} from 'redux'
 
 const allReducers = combineReducers({
@@ -12,7 +12,7 @@ const allReducers = combineReducers({
     ecomPvz: getEcomPvzFromFileReducer,
     placemarks: placemarkReducer,
     company: loadCompanyReducer,
-    service: loadServiceReducer
+    usluga: loadUslugaReducer
 })
 
 export default allReducers

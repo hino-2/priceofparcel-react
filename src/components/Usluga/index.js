@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector, } from 'react-redux'
-import { loadService } from '../../actions'
+import { loadUsluga } from '../../actions'
 import Parser from 'html-react-parser'
 import './style.scss'
 
-export const Usluga = () => {
+const Usluga = () => {
     const [ulsugaListHtml, setUslugaListHtml] = useState("")
     const dispatch = useDispatch()
     let company = useSelector(state => state.company)
-    const handleChange = () => dispatch(loadService(document.querySelector('#uslugaDropdown').value))
+    const handleChange = () => dispatch(loadUsluga(document.querySelector('#uslugaDropdown').value))
     
     useEffect(() => {
         const fetchData = async () => {
@@ -16,8 +16,9 @@ export const Usluga = () => {
             const data = await responce.json()
             const res = data.filter(item => item.company_id === company)
                             .sort  ((a, b) => a.cat_id - b.cat_id)
-                            .reduce((html, item) => html += `<option value="${item.object}">${item.name}</option>`, '')
+                            .reduce((html, item, i) => html += `<option value="${item.object}">${item.name}</option>`, '')
             setUslugaListHtml(res)
+            dispatch(loadUsluga(document.querySelector('#uslugaDropdown').value))
         }
         fetchData();
         
@@ -49,3 +50,5 @@ export const Usluga = () => {
         </div>
     )
 }
+
+export default Usluga

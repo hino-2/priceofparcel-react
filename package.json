@@ -14,7 +14,8 @@
     "react-scripts": "3.4.0",
     "react-yandex-maps": "^4.2.0",
     "redux": "^4.0.5",
-    "scss": "^0.2.4"
+    "scss": "^0.2.4",
+    "uniqid": "^5.2.0"
   },
   "scripts": {
     "start": "react-scripts start",

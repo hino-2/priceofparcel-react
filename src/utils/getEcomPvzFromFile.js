@@ -1,3 +1,5 @@
+import { getSafe } from "./basic";
+
 const getEcomPVZfromFile = async(file) => {
     let ecomCollection = {
         type: "FeatureCollection",
@@ -54,18 +56,6 @@ const getEcomPVZfromFile = async(file) => {
         // console.log(JSON.stringify(yaObject));
     })
     return ecomCollection.features
-}
-
-const getSafe = fn => {
-    try {
-        if (fn() !== undefined) {
-            return fn();
-        } else {
-            return "";
-        }
-    } catch (e) {
-        return "";
-    }
 }
 const getWorkTime = (val) => {
     let worktime = val["work-time"] ? val["work-time"] : [
