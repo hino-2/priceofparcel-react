@@ -10,7 +10,7 @@ function YMap () {
     let   PVZ        = []
 
     PVZ = showEcom ? [...placemarks, ...ecomPvz] : placemarks
-    console.log(PVZ)
+    // console.log(PVZ)
     
 
     const [mapState, setMapState] = useState({ 

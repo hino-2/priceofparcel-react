@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import './style.scss'
-import { printParamsRP, printServicesRP } from "../../utils/printParamsAndServicesRP";
+import { printParamsRP, printServicesRP } from "./printParamsAndServicesRP";
 import { showECOM, hideECOM } from '../../actions'
 import { getSafe } from "../../utils/basic";
 
@@ -21,6 +21,7 @@ const Params = () => {
             dispatch(showECOM())
             isShown = true
         }
+        document.querySelector('#btnPVZ').blur()
     }
 
     const handleNiceBorderEffect = (e) => {
@@ -31,29 +32,29 @@ const Params = () => {
         objParams.style.setProperty('--y', `${ y }px`)
     }
 
-    const handleServiceChange = (id, services) => {
-        console.log(id);
-        
-        // console.log(document.querySelector(`#s${id}`).checked);
-    //     if(document.querySelector('#s' + id).checked) {			// serviceoff
-    //         $.each(services.find(x => x.id === id).serviceoff, function(key, val) {
-    //             $('#s' + val)[0].checked = false;
-    //       });
-    //   }
-    //     if(!document.querySelector('#s' + id).checked) {			// serviceon
-    //         $.each(services.find(x => x.id === id).serviceon, function(key, val) {
-    //             document.querySelector('#s' + id).checked = true;
-    //       });
-    //   }
+    const handleParamsChange = () => {
 
-        // calculateRP();
-        // console.log('calc', canCalculate);
+    }
+
+    const handleServiceChange = (id, services) => {
+        if(document.querySelector('#s' + id).checked) {			    
+            const sOff = services.find(x => x.id === id).serviceoff
+            if(sOff) sOff.forEach((id) => document.querySelector(`#s${id}`).checked = false)
+        }
+        
+        if(!document.querySelector('#s' + id).checked) { 			
+            const sOn = services.find(x => x.id === id).serviceon
+            if(sOn) sOn.forEach((id) => document.querySelector(`#s${id}`).checked = true)
+        }
+
     }
 
     const generateParamsJSX = (data) => {
-        const params = data.object[0].params.filter(item => !['from', 'to', 'service', 'country'].includes(item['id']))
+        const params = data.object[0].params.filter(item => !['from', 'to', 'service', 'country'].includes(item.id))
         
-		if(data['id'] === 53030) {							// кнопка для ЕКОМа
+        if(!params) return
+        
+		if(data.id === 53030) {							// кнопка для ЕКОМа
 			params.push({
 				id : 'btnPVZ',
 				name : 'Показать/скрыть пункты выдачи',
@@ -61,11 +62,8 @@ const Params = () => {
 				param : 'btnPVZ'
 			});
         }
-        
-        if(!params) return
 
-        // let paramsInJSX = params.reduce((html, item) => html += printParamsRP(item), '') 
-        let paramsInJSX = params.map((item) => printParamsRP(item))
+        let paramsInJSX = params.map((item) => printParamsRP(item, toggleEcomPvz, handleParamsChange))
         if(params.length % 2 !== 0) paramsInJSX.push(<div key="parSym">&nbsp;</div>)
 
         setParamsJSX(paramsInJSX)
@@ -80,11 +78,6 @@ const Params = () => {
         if(services.length % 2 !== 0) servicesInJSX.push(<div key="servSym">&nbsp;</div>)
 
         setServicesJSX(servicesInJSX)
-        services.forEach((item) => {
-            console.log(`#s${item['id']}`)
-            
-            // document.querySelector(`#s${item['id']}`).addEventListener('click', handleServiceChange(item, services))
-        })
     }
 
     useEffect(() => {
@@ -97,8 +90,6 @@ const Params = () => {
                     if(getSafe(() => data.object[0])) {
                         generateParamsJSX(data)
                         generateServicesJSX(data)
-                        // if(data.object[0].id === 53030) 
-                        //     document.querySelector('#btnPVZ').addEventListener('click', toggleEcomPvz)
                     }
                     break
                 case "1":
@@ -109,43 +100,12 @@ const Params = () => {
             }
         }
         getParamsAndServicesFromAPI(company, usluga)
-
-        // return document.querySelectorAll('.service').forEach((item) => 
-        //     document.querySelector(`#s${item['id']}`).removeEventListener('click', handleServiceChange(item, services)))
-        // return setTimeout(() => {
-        //     document.querySelector('#btnPVZ').removeEventListener('click', toggleEcomPvz)
-        // }, 2000) 
     }, [usluga, company])
 
     useEffect(() => {
         document.querySelector('#objParamsAndServices').addEventListener('mousemove', handleNiceBorderEffect)
-        return document.querySelector('#objParamsAndServices').removeEventListener('mousemove', handleNiceBorderEffect)
+        // return document.querySelector('#objParamsAndServices').removeEventListener('mousemove', handleNiceBorderEffect)
     })
-
-    // const h = () => alert(1)
-    // let serv_jsx = <input onClick={h} type="checkbox" id={`s`} className="service switch_1" /> 
-    // let serv = [React.createElement(
-    //     'input',
-    //     {
-    //         'type': 'checkbox',
-    //         'id': 's22',
-    //         'className': 'service switch_1',
-    //         'defaultChecked': true,
-    //         'onClick': () => alert(1)
-    //     },
-    //     null
-    // )]
-    // serv.push(React.createElement(
-    //     'input',
-    //     {
-    //         'type': 'checkbox',
-    //         'id': 's22',
-    //         'className': 'service switch_1',
-    //         'defaultChecked': (1 === 2 ? true : false),
-    //         'onClick': () => alert(1)
-    //     },
-    //     null
-    // ))
 
     return (
         <div id="objParamsAndServices" className="objParamsAndServices niceborder">

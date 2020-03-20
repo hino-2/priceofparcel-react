@@ -56,3 +56,31 @@ export const loadUsluga = (usluga) => {
         data: usluga
     }
 }
+
+export const setParams = (params) => {
+    return {
+        type: "SET_PARAMS",
+        data: params
+    }
+}
+
+export const setServices = (services) => {
+    return {
+        type: "SET_SERVICES",
+        data: services
+    }
+}
+
+export const setDirectionIndexFrom = (index) => {
+    return {
+        type: "SET_DIRECTION_INDEX_FROM",
+        data: index
+    }
+}
+
+export const setDirectionIndexTo = (index) => {
+    return {
+        type: "SET_DIRECTION_INDEX_TO",
+        data: index
+    }
+}

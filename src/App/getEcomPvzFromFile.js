@@ -1,4 +1,4 @@
-import { getSafe } from "./basic";
+import { getSafe } from "../utils/basic"
 
 const getEcomPVZfromFile = async(file) => {
     let ecomCollection = {

@@ -1,6 +1,6 @@
 import React from "react"
-import { format, formatDate, getSafe, replaceAll } from "./basic"
-import uniqid from "uniqid";
+import { format, formatDate, getSafe, replaceAll } from "../../utils/basic"
+import uniqid from "uniqid"
 
 const datatype = {
     1 : 'text',
@@ -16,20 +16,20 @@ const datatype = {
     99 : 'button'
 }
 
-export const printParamsRP = (param) => {
+export const printParamsRP = (param, toggleEcomPvz, handleParamsChange) => {
     param['name'] = replaceAll(param['name'], '-', '/');
     switch(param['datatype']) {
         case 1: case 2:	case 3:	case 13: case 17: case 29: case 33:
             let unit = '', auxClass = '', auxPadding = '25', defVal = getSafe(() => param['def']);
             if (getSafe(() => param['unit'])[0] === 'грамм') {
-                unit = '&nbsp;(грамм)';
+                unit = '(грамм)';
                 defVal = format(defVal);
-                auxClass = ' weight';
+                auxClass = 'weight';
                 auxPadding = '25';
             }
             if (getSafe(() => param['unit'])[0] === 'руб.')  {
                 unit = '';
-                auxClass = ' currency';
+                auxClass = 'currency';
                 auxPadding = '25';
                 defVal = format(defVal / 100);
             }
@@ -41,7 +41,9 @@ export const printParamsRP = (param) => {
                                    key={uniqid()}
                                    className={`effect-1 param ${auxClass}`} 
                                    id={param['param']} 
+                                   name={`${param['param']}`}
                                    defaultValue={defVal} 
+                                   onChange={handleParamsChange}
                                    style={{"width": "calc(100% - 25px)", "margin": "3px 0 3px", "padding": `6px 0 5px ${auxPadding}px`}} /> 
                             <span className="focus-border" key={uniqid()}></span>
                         </div> 
@@ -53,28 +55,33 @@ export const printParamsRP = (param) => {
                             <input type="date" 
                                    className="effect-1 param" 
                                    id={param['param']} 
+                                   name={`${param['param']}`}
                                    key={uniqid()}
                                    defaultValue={formatDate(new Date())} 
+                                   onChange={handleParamsChange}
                                    style={{"width": "calc(100% - 25px)", "margin": "3px 0 3px", "padding": "3px 0 3px 25px"}}/>
                             <span className="focus-border" key={uniqid()}></span>
                         </div>
                     </div>)
         case 5:			// checkbox
             return (<div key={uniqid()}>
-                        <div class="switch_box box_1" 
+                        <div className="switch_box box_1" 
                              style={{"display": "table-cell", "verticalAlign": "middle"}} 
                              key={uniqid()}> 
                             <input type={datatype[param['datatype']]} 
                                    className="param switch_1" 
                                    id={param['param']}
+                                   name={`${param['param']}`}
                                    key={uniqid()}
-                                   defaultChecked /> 
-                            <label htmlFor={param['param']}
-                                   key={uniqid()} 
-                                   className="objLabel"></label> 
+                                   defaultChecked
+                                   onChange={handleParamsChange} /> 
                         </div> 
                         <div style={{"display": "table-cell", "textAlign": "right"}} key={uniqid()}> 
-                            {param['name']} {(param['unit'] ? '(' + param['unit'][0] + ')' : '')}
+                            <label htmlFor={param['param']}
+                                   key={uniqid()} 
+                                   className="objLabel">
+                                    {param['name']} {(param['unit'] ? '(' + param['unit'][0] + ')' : '')}
+                            </label>
                         </div> 
                     </div>)
         case 41:		// select
@@ -85,11 +92,16 @@ export const printParamsRP = (param) => {
                             {param['name']}
                         </label>
                         <div className="container" key={uniqid()} style={{"marginBottom": "5px"}}> 
-                            <select id={`${param['param']}Dropdown`} key={uniqid()}>
-                                {param['list'].map((item) => (<option value={item.object} key={uniqid()}>{item.name}</option>))}
+                            <select id={`${param['param']}Dropdown`} 
+                                    name={`${param['param']}`}
+                                    className="param"
+                                    key={uniqid()}
+                                    onChange={handleParamsChange}>
+                                {param['list'].map((item) => (<option value={item.id} key={uniqid()}>{item.name}</option>))}
                             </select>
                         </div>
                     </div>)
+                    // TODO: select
             //                     <div class="dropdown" id="' + param['param'] + 'Dropdown" style="border-radius: 0px; margin-top: 3px;"> \
             //                         <div class="select" style="padding: 5px 0px 5px 10px; margin: 0;"> \
             //                             <span id="' + param['param'] + 'Title">' + param['name'] + '</span> \
@@ -109,13 +121,15 @@ export const printParamsRP = (param) => {
                 return (<div style={{"paddingRight": "4px"}} key={uniqid()}>
                             <button className="up" 
                                     id={param['param']} 
+                                    name={`${param['param']}`}
                                     key={uniqid()}
                                     style={{"width": "100%", 
                                             "height": "53%", 
                                             "margin": "22px 0px 0px 0px", 
                                             "padding": "4px 6px 3px 6px",
                                             "--color": "#2a53d3", 
-                                            "--hover": "#2a53d3"}}>
+                                            "--hover": "#2a53d3"}}
+                                    onClick={() => toggleEcomPvz()}>
                                 {param['name']}
                             </button>
                         </div>)
