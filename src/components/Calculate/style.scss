@@ -45,7 +45,7 @@ button {
 /* help and pricing */
 .help {
 	position: fixed;
-	display: none;
+	display: block;
 	background-color: #ffffffed;
 	border: 2px solid #0ebeff;
 	box-shadow: 0 0 6px rgba(0,0,0,0.5);
@@ -53,6 +53,13 @@ button {
 	padding: 5px 10px;
 	z-index: 999;
 	overflow-y: auto;
+	opacity: 0;
+	transition: 0.4s opacity;
+}
+
+.unfade {
+	opacity: 1!important;
+	transition: 0.4s opacity;
 }
 
 .price {

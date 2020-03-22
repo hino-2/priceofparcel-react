@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import './style.scss'
 import { printParamsRP, printServicesRP } from "./printParamsAndServicesRP";
 import { showECOM, hideECOM } from '../../actions'
-import { getSafe } from "../../utils/basic";
+import { getSafe, format } from "../../utils/basic";
 
 const Params = () => {
     const company  = useSelector(state => state.company)
@@ -32,8 +32,8 @@ const Params = () => {
         objParams.style.setProperty('--y', `${ y }px`)
     }
 
-    const handleParamsChange = () => {
-
+    const handleParamsChange = (e) => {
+        e.target.value = format(e.target.value)
     }
 
     const handleServiceChange = (id, services) => {

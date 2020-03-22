@@ -1,20 +1,22 @@
-import React from 'react';
-import { useDispatch } from "react-redux"
-import { layoutMobile, layoutDesktop, getEcomPvzFromFileAction } from '../actions'
-import './App.scss';
-import YMap from '../components/Map'
-import Title from '../components/Title'
-import CompanyList from '../components/CompanyList'
-import Usluga from "../components/Usluga"
-import Params from "../components/Params"
-import Calculate from "../components/Calculate";
+import React              from 'react'
+import { useDispatch }    from 'react-redux'
 import getEcomPvzFromFile from './getEcomPvzFromFile'
-import Direction from '../components/Direction';
-import DirectionIndex from "../components/DirectionIndex";
+import { layoutMobile, 
+         layoutDesktop, 
+         getEcomPvzFromFileAction } from '../actions'
+import './App.scss'
+import YMap           from '../components/Map'
+import Title          from '../components/Title'
+import CompanyList    from '../components/CompanyList'
+import Usluga         from "../components/Usluga"
+import Params         from "../components/Params"
+import Calculate      from "../components/Calculate"
+import Direction      from '../components/Direction'
+import DirectionIndex from "../components/DirectionIndex"
 
 function App() {
   const dispatch = useDispatch()
-  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent)
   
   if(isMobile) {
     // document.write("<style>.map { visibility: hidden; }</style>");

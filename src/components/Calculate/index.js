@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect } from "react"
 import uniqid from "uniqid";
 import './style.scss'
 import { useSelector } from "react-redux";
@@ -42,14 +42,22 @@ const Calculate = () => {
         if(document.querySelector('#help_price') === null) return
         
         let details = document.querySelector('#details')
+        if(e.code === 'Escape')  {
+            // details.style.display = 'none'
+            details.classList.remove('unfade')
+            return
+        }
         if(e.target.id !== 'help_price') { 
-            details.style.display = 'none' 
+            // details.style.display = 'none' 
+            details.classList.remove('unfade')
             return
         }
 
-        let isVisible = window.getComputedStyle(details).display === 'none' ? false : true
+        // let isVisible = window.getComputedStyle(details).display === 'none' ? false : true
+        let isVisible = window.getComputedStyle(details).opacity === "0" ? false : true
         if(isVisible) {
-            details.style.display = 'none'
+            //details.style.display = 'none'
+            details.classList.remove('unfade')
             return
         }
         else {
@@ -57,7 +65,8 @@ const Calculate = () => {
             
             details.style.left = `${imgQuestionCoords.x + e.offsetX + 22}px`
             details.style.top =  `${imgQuestionCoords.y + e.offsetY - details.offsetHeight}px`
-            details.style.display = 'block'
+            // details.style.display = 'block'
+            details.classList.add('unfade')
         }
     
         // TODO: low width pricing details
@@ -81,13 +90,13 @@ const Calculate = () => {
         
         let price = parseInt(data.paynds) / 100
         if (isNaN(price)) {
-            price = data.error['0']
-            
-            setTariff([<div key={uniqid()}><font color="red" key={uniqid()}>{price}</font></div>]);
-            // TODO: tariff error highlights
+            setTariff([<div key={uniqid()}><font color="red" key={uniqid()}>{data.error['0']}</font></div>]);
             [...document.querySelectorAll('#objParamsAndServices label.objLabel')].forEach((item) => {
-                if(price.search(item.htmlFor) > 0)
-                    document.querySelector(`#${item.htmlFor}`).style.border = '1px solid red'
+                if(data.error['0']
+                    .replace('вложен', 'sumin')
+                    .replace('дату',   'date')
+                    .search(item.htmlFor) > 0)
+                        document.querySelector(`#${item.htmlFor}`).style.border = '1px solid red'
             })
         } else {
             setTariff([<React.Fragment key={uniqid()}>
@@ -96,14 +105,12 @@ const Calculate = () => {
                              src="img/question-circle-o.svg" 
                              style={{"marginLeft": "5px", "cursor": "pointer"}} 
                              alt="Детали тарификации" 
-                            //  onClick={togglePricingDetails}
                              key={uniqid()} />
                        </React.Fragment>])
             // TODO: check mobile version                       
             // setTimeout(() => {		                    		     		          // без этого на мобилках по какой то причине аттрибут font.size
             //     document.querySelector('#actualPrice').innerHTML(price + ' ₽ с НДС') // не всегда усваивался браузером, и текст был size=1
             // }, 10)
-            // TODO: pricing detais
             let pricingDetailsJSX = []
             
             data.tariff.forEach((item) => {
@@ -162,7 +169,11 @@ const Calculate = () => {
 
     useEffect(() => {
         document.querySelector('body').addEventListener('click', togglePricingDetails)
-        return () => document.querySelector('body').removeEventListener('click', togglePricingDetails)
+        document.querySelector('body').addEventListener('keydown', togglePricingDetails)
+        return () => { 
+            document.querySelector('body').removeEventListener('click', togglePricingDetails)
+            document.querySelector('body').removeEventListener('keydown', togglePricingDetails)
+        }
     })
 
     return (
