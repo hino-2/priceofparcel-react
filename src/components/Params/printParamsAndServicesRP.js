@@ -92,7 +92,7 @@ export const printParamsRP = (param, toggleEcomPvz, handleParamsChange) => {
                             {param['name']}
                         </label>
                         <div className="container" key={uniqid()} style={{"marginBottom": "5px"}}> 
-                            <select id={`${param['param']}Dropdown`} 
+                            <select id={`${param['param']}`} 
                                     name={`${param['param']}`}
                                     className="param"
                                     key={uniqid()}

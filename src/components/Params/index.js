@@ -86,7 +86,6 @@ const Params = () => {
                 case "0":
                     const responce = await fetch(`https://tariff.pochta.ru/tariff/v1/dictionary?jsontext&object=${usluga}`)
                     const data = await responce.json()
-                    console.log(data) 
                     if(getSafe(() => data.object[0])) {
                         generateParamsJSX(data)
                         generateServicesJSX(data)

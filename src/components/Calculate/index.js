@@ -70,6 +70,9 @@ const Calculate = () => {
     }
 
     const fetchTariff = async () => {
+        [...document.querySelectorAll('#objParamsAndServices label.objLabel')].forEach((item) => 
+            document.querySelector(`#${item.htmlFor}`).style.border = ''
+        )        
         let tariffQuery = `https://tariff.pochta.ru/tariff/v1/calculate?jsontext&object=${usluga}&from=${from}&to=${to}` 
                             + generateQueryStringFromParams() 
                             + generateQueryStringFromServices()
@@ -78,13 +81,14 @@ const Calculate = () => {
         
         let price = parseInt(data.paynds) / 100
         if (isNaN(price)) {
-            price = data.error['0'];
-            setTariff('<div><font color="red">' + price + '</font></div>')
+            price = data.error['0']
+            
+            setTariff([<div key={uniqid()}><font color="red" key={uniqid()}>{price}</font></div>]);
             // TODO: tariff error highlights
-            // $('#objParams').find('label').each(function() {
-            //     if(price.search($(this)[0].htmlFor) > 0)
-            //         $('#' + $(this)[0].htmlFor).css('border', '1px solid red');
-            // });
+            [...document.querySelectorAll('#objParamsAndServices label.objLabel')].forEach((item) => {
+                if(price.search(item.htmlFor) > 0)
+                    document.querySelector(`#${item.htmlFor}`).style.border = '1px solid red'
+            })
         } else {
             setTariff([<React.Fragment key={uniqid()}>
                         <font id="actualPrice" color="#2a53d3" size="5" key={uniqid()}>{price} ₽ с НДС</font>
@@ -129,7 +133,6 @@ const Calculate = () => {
         let deliveryQuery = `https://delivery.pochta.ru/delivery/v1/calculate?jsontext&object=${usluga}&from=${from}&to=${to}`
         let responce = await fetch(deliveryQuery)
         let data = await responce.json()
-        console.log('delivery', data)
         
         if (typeof data.delivery !== 'undefined') {
             let deliveryMin = parseInt(data.delivery.min)
