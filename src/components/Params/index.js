@@ -104,7 +104,7 @@ const Params = () => {
 
     useEffect(() => {
         document.querySelector('#objParamsAndServices').addEventListener('mousemove', handleNiceBorderEffect)
-        // return document.querySelector('#objParamsAndServices').removeEventListener('mousemove', handleNiceBorderEffect)
+        return () => document.querySelector('#objParamsAndServices').removeEventListener('mousemove', handleNiceBorderEffect)
     })
 
     return (

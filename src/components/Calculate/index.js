@@ -1,12 +1,13 @@
-import React, { useState } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import uniqid from "uniqid";
 import './style.scss'
 import { useSelector } from "react-redux";
-import { replaceAll } from "../../utils/basic";
+import { replaceAll, getSafe } from "../../utils/basic";
 
 const Calculate = () => {
     const [tariff,   setTariff]   = useState('')
     const [delivery, setDelivery] = useState('')
+    const [pricingDetails, setPricingDetails] = useState('')
     const company  = useSelector(state => state.company)
     const usluga   = useSelector(state => state.usluga)
     const from     = useSelector(state => state.from)
@@ -32,9 +33,40 @@ const Calculate = () => {
     }
 
     const generateQueryStringFromServices = () => {
-        return [...document.querySelectorAll('.service')].reduce((query, item) => {
+        return '&service=' + [...document.querySelectorAll('.service')].reduce((query, item) => {
             return query += item.checked ? item.id.replace('s', '') + ',' : ''
         }, '')
+    }
+
+    const togglePricingDetails = (e) => {
+        if(document.querySelector('#help_price') === null) return
+        
+        let details = document.querySelector('#details')
+        if(e.target.id !== 'help_price') { 
+            details.style.display = 'none' 
+            return
+        }
+
+        let isVisible = window.getComputedStyle(details).display === 'none' ? false : true
+        if(isVisible) {
+            details.style.display = 'none'
+            return
+        }
+        else {
+            let imgQuestionCoords = document.querySelector('#help_price').getBoundingClientRect()
+            
+            details.style.left = `${imgQuestionCoords.x + e.offsetX + 22}px`
+            details.style.top =  `${imgQuestionCoords.y + e.offsetY - details.offsetHeight}px`
+            details.style.display = 'block'
+        }
+    
+        // TODO: low width pricing details
+        // if(low_width) {
+        //     $("#" + helpID).css('left', 0);
+        //     $("#" + helpID).css('top',  0);
+        //     $("#" + helpID).css('max-width',  ($(window).width() - 2) + 'px');
+        //     $("#" + helpID).css('height',  '-webkit-fill-available');
+        // } else {
     }
 
     const fetchTariff = async () => {
@@ -43,7 +75,6 @@ const Calculate = () => {
                             + generateQueryStringFromServices()
         let responce = await fetch(tariffQuery)
         let data = await responce.json()
-        console.log('tariff', data)
         
         let price = parseInt(data.paynds) / 100
         if (isNaN(price)) {
@@ -61,6 +92,7 @@ const Calculate = () => {
                              src="img/question-circle-o.svg" 
                              style={{"marginLeft": "5px", "cursor": "pointer"}} 
                              alt="Детали тарификации" 
+                            //  onClick={togglePricingDetails}
                              key={uniqid()} />
                        </React.Fragment>])
             // TODO: check mobile version                       
@@ -68,18 +100,28 @@ const Calculate = () => {
             //     document.querySelector('#actualPrice').innerHTML(price + ' ₽ с НДС') // не всегда усваивался браузером, и текст был size=1
             // }, 10)
             // TODO: pricing detais
-            // var htmlPrice = '';
-            // $.each(data.tariff, function(key, val) {
-            //     var valnds;
-            //     $.each(val, function(key1, val1) {
-            //         valnds = getSafe(() => val1['valnds']);
-            //     });
-            //     htmlPrice += parseInt(valnds) > 0 ? '<div class="price"><div style="background-color: white;">' + val['name'] + '</div><div style="background-color: white; display: grid; justify-items: end;"><font color=' + indexColorChoosed + '>' + valnds / 100 + ' ₽</font></div></div>' : '';
-            // });
-            // $('#helpPriceDiv').html(htmlPrice);
-            // $('#help_price').on('click', function(e){
-            //     helpShow('help_price','helpPriceDiv', true, e);
-            // });
+            let pricingDetailsJSX = []
+            
+            data.tariff.forEach((item) => {
+                let valnds
+                [...Object.values(item)].forEach((item) => {
+                    valnds = getSafe(() => item.valnds)
+                })
+                if(parseInt(valnds) > 0) 
+                    pricingDetailsJSX.push(
+                        <div className="price" key={uniqid()}>
+                            <div style={{"backgroundColor": "white"}} key={uniqid()}>
+                                {item.name}
+                            </div>
+                            <div style={{"backgroundColor": "white", "display": "grid", "justifyItems": "end"}} key={uniqid()}>
+                                <font color="#2a53d3" key={uniqid()}>
+                                    {valnds / 100} ₽
+                                </font>
+                            </div>
+                        </div>
+                    )
+            })
+            setPricingDetails(pricingDetailsJSX)
         }
     }
 
@@ -115,6 +157,11 @@ const Calculate = () => {
         }
     }
 
+    useEffect(() => {
+        document.querySelector('body').addEventListener('click', togglePricingDetails)
+        return () => document.querySelector('body').removeEventListener('click', togglePricingDetails)
+    })
+
     return (
         <>
             <div className="main_button" key={uniqid()}>
@@ -132,6 +179,9 @@ const Calculate = () => {
             </div>
             <div className="result" id="delivery" key={uniqid()}>
                 { delivery }
+            </div>
+            <div className="help" id="details" key={uniqid()}>
+                { pricingDetails }
             </div>
         </>
     )
