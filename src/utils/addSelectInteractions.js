@@ -1,12 +1,14 @@
 const addSelectInteraction = (id) => {
 	// init select
-	// $('#' + id + 'Title').text($('#' + id + 'List').children().eq(0).text());
-	// $('#' + id).attr('value', $('#' + id + 'List').children().eq(0).val());
+	document.querySelector(`#${id}Title`).innerHTML = document.querySelector(`#${id}List`).firstElementChild().innerHTML
+	document.querySelector(`#${id}`).setAttribute('value', document.querySelector(`#${id}List`).firstElementChild().value)
 	// if(id == 'fromPoints') {
 	// 	if($('#fromPoints').val() != 1) {
 	// 		setIndex('#from_ind', $('#fromPoints').val(), indexColorChoosed);
 	// 	}
 	// }
+
+	// TODO: international package
 	// if(id == 'toPoints') {
 	// 	if($('#usluga').attr('cat') == 4) {					// если международная
 	// 		setIndex('#to_ind', 'ISO ' + $('#toPoints').val(), indexColorChoosed);
@@ -36,28 +38,28 @@ const addSelectInteraction = (id) => {
 				getTariffInfo($('#usluga').val());
 			}
 		}
-		if(id == 'fromPoints' || id == 'toPoints') {
-			if($('#fromPoints').val() != 1 && $('#fromPointsDropdown').is(":focus")) {
-				$('#fromPoints').val($(this).val());
-				setIndex('#from_ind', $('#fromPoints').val(), indexColorChoosed);
-				getOPS($('#from_ind').html(), '#from_ind');
-			}
-			if($('#toPointsDropdown').is(":focus")) {
-				if($('#usluga').attr('cat') == 4) {					// если международная
-					$('#toPoints').val($(this).val());
-					setIndex('#to_ind', 'ISO ' + $('#toPoints').val(), indexColorChoosed);
-				} else
-					setIndex('#to_ind', $('#toPoints').val(), indexColorChoosed);
-			}
-		}
+		// if(id == 'fromPoints' || id == 'toPoints') {
+		// 	if($('#fromPoints').val() != 1 && $('#fromPointsDropdown').is(":focus")) {
+		// 		$('#fromPoints').val($(this).val());
+		// 		setIndex('#from_ind', $('#fromPoints').val(), indexColorChoosed);
+		// 		getOPS($('#from_ind').html(), '#from_ind');
+		// 	}
+		// 	if($('#toPointsDropdown').is(":focus")) {
+		// 		if($('#usluga').attr('cat') == 4) {					// если международная
+		// 			$('#toPoints').val($(this).val());
+		// 			setIndex('#to_ind', 'ISO ' + $('#toPoints').val(), indexColorChoosed);
+		// 		} else
+		// 			setIndex('#to_ind', $('#toPoints').val(), indexColorChoosed);
+		// 	}
+		// }
 		if(id == 'company') {
 			$('#' + id + 'Title').text($(this).text());
 			$('#' + id).attr('value', $(this).attr('value'));
 			getUslugaList($(this).val());
 		}
-		if(id == 'cdekDogovor') {
-			CDEKServices($(this).val());
-		}
+		// if(id == 'cdekDogovor') {
+		// 	CDEKServices($(this).val());
+		// }
 	});
 
 	$('.dropdown .dropdown-menu li').click(function () {

@@ -1,17 +1,47 @@
 [
-{"type":"header","version":"4.9.2","comment":"Export to JSON plugin for PHPMyAdmin"},
-{"type":"database","name":"priceparcel"},
-{"type":"table","name":"category","database":"priceparcel","data":
-[
-{"company_id":"0","cat_id":"0","cat_name":"Особая"},
-{"company_id":"0","cat_id":"1","cat_name":"Посылки для населения"},
-{"company_id":"0","cat_id":"2","cat_name":"Посылки для организаций"},
-{"company_id":"0","cat_id":"3","cat_name":"EMS отправления"},
-{"company_id":"0","cat_id":"4","cat_name":"Международные"},
-{"company_id":"1","cat_id":"0","cat_name":"Тарифы только для Интернет-магазинов"},
-{"company_id":"1","cat_id":"1","cat_name":"Тарифы Китайский экспресс"},
-{"company_id":"1","cat_id":"2","cat_name":"Тарифы для обычной доставки"},
-{"company_id":"1","cat_id":"3","cat_name":"Тарифы для международной доставки"}
-]
-}
+    {
+        "company_id": "0",
+        "cat_id": "0",
+        "cat_name": "Особая"
+    },
+    {
+        "company_id": "0",
+        "cat_id": "1",
+        "cat_name": "Посылки для населения"
+    },
+    {
+        "company_id": "0",
+        "cat_id": "2",
+        "cat_name": "Посылки для организаций"
+    },
+    {
+        "company_id": "0",
+        "cat_id": "3",
+        "cat_name": "EMS отправления"
+    },
+    {
+        "company_id": "0",
+        "cat_id": "4",
+        "cat_name": "Международные"
+    },
+    {
+        "company_id": "1",
+        "cat_id": "0",
+        "cat_name": "Тарифы только для Интернет-магазинов"
+    },
+    {
+        "company_id": "1",
+        "cat_id": "1",
+        "cat_name": "Тарифы Китайский экспресс"
+    },
+    {
+        "company_id": "1",
+        "cat_id": "2",
+        "cat_name": "Тарифы для обычной доставки"
+    },
+    {
+        "company_id": "1",
+        "cat_id": "3",
+        "cat_name": "Тарифы для международной доставки"
+    }
 ]

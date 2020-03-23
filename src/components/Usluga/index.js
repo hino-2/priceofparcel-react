@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector, } from 'react-redux'
-import { loadUsluga } from '../../actions'
-import Parser from 'html-react-parser'
+import { useDispatch, useSelector, }  from 'react-redux'
+import { loadUsluga }                 from '../../actions'
+import uniqid                         from 'uniqid'
 import './style.scss'
 
 const Usluga = () => {
@@ -16,7 +16,7 @@ const Usluga = () => {
             const data = await responce.json()
             const res = data.filter(item => item.company_id === company)
                             .sort  ((a, b) => a.cat_id - b.cat_id)
-                            .reduce((html, item, i) => html += `<option value="${item.object}">${item.name}</option>`, '')
+                            .map((item) => (<option value={item.object} cat={item.cat_id} key={uniqid()}>{item.name}</option>))
             setUslugaListHtml(res)
             dispatch(loadUsluga(document.querySelector('#uslugaDropdown').value))
         }
@@ -27,6 +27,7 @@ const Usluga = () => {
         return () => document.querySelector('#uslugaDropdown').removeEventListener("change", handleChange)
     }, [company])
 
+    // TODO: select
 //     <div class="usluga">
 //     <div class="container" style="width: 100%;">   
 //         <div class="dropdown" id="uslugaDropdown">
@@ -45,7 +46,7 @@ const Usluga = () => {
     return (
         <div className="container">   
             <select id="uslugaDropdown">
-                { Parser(ulsugaListHtml) }
+                { ulsugaListHtml }
             </select>
         </div>
     )
