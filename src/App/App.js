@@ -9,6 +9,7 @@ import YMap           from '../components/Map'
 import Title          from '../components/Title'
 import CompanyList    from '../components/CompanyList'
 import Usluga         from "../components/Usluga"
+import Help           from "../components/Help"
 import Params         from "../components/Params"
 import Calculate      from "../components/Calculate"
 import Direction      from '../components/Direction'
@@ -35,7 +36,7 @@ function App() {
         <div className="usluga">
           <CompanyList />
           <Usluga />
-          <img id="help_main" src="img/question-circle-o.svg" style={{"cursor": "pointer"}} alt="Помощь"/>
+          <Help />
         </div>
         <Params />
         <div>&nbsp;</div>
