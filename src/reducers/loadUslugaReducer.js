@@ -1,4 +1,4 @@
-const loadUslugaReducer = (state = "0", action) => {
+const loadUslugaReducer = (state = {}, action) => {
     switch (action.type) {
         case "LOAD_USLUGA":
             return action.data

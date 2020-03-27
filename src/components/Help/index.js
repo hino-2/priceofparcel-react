@@ -58,17 +58,18 @@ const Help = () => {
 
     return (
         <>
-            <img id="help_main" 
-                src="img/question-circle-o.svg" 
-                style={{"cursor": "pointer"}} 
-                alt="Помощь" />
+            <div>
+                <img id="help_main" 
+                    src="img/question-circle-o.svg" 
+                    style={{"cursor": "pointer"}} 
+                    alt="Помощь" />
+            </div>
             <div id="helpMainDiv" className="mainhelp">
                 <div style={{"display": "inline"}}>
                     <font style={{"fontSize": "12px", "color": "#c6c6c6"}}>кликните в любое место, чтобы закрыть</font>
                 </div>
-                <br/>
-                <div dangerouslySetInnerHTML={{__html: help}}>
-                </div>
+                <br />
+                <div dangerouslySetInnerHTML={{__html: help}} />
             </div>
         </>
     )

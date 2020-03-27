@@ -7,7 +7,7 @@ import { getSafe, format } from "../../utils/basic";
 
 const Params = () => {
     const company  = useSelector(state => state.company)
-    const usluga   = useSelector(state => state.usluga)
+    const usluga   = useSelector(state => state.usluga.object)
     let   isShown  = useSelector(state => state.showEcom)
     const dispatch = useDispatch()
     const [paramsJSX, setParamsJSX]     = useState("")

@@ -9,7 +9,7 @@ const Calculate = () => {
     const [delivery, setDelivery] = useState('')
     const [pricingDetails, setPricingDetails] = useState('')
     const company  = useSelector(state => state.company)
-    const usluga   = useSelector(state => state.usluga)
+    const usluga   = useSelector(state => state.usluga.object)
     const from     = useSelector(state => state.from)
     const to       = useSelector(state => state.to)
 

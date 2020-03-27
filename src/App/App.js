@@ -36,7 +36,7 @@ function App() {
   return (
     <div className="app">
       <div className="left-panel">
-        <div className="under-development">
+        {/* <div className="under-development">
           <div></div>
           <div>
             Сайт в процессе разработки
@@ -48,7 +48,7 @@ function App() {
           <div>
             <button className="under-development-button" onClick={closeUnderDevelopmentWindow}>Понятно!</button>
           </div>
-        </div>
+        </div> */}
         <Title />
         <div className="usluga">
           <CompanyList />
