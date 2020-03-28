@@ -8,14 +8,14 @@ const Usluga = () => {
     const [ulsugaListHtml, setUslugaListHtml] = useState("")
     // const [usluga, setUsluga] = useState(0)
     const dispatch = useDispatch()
-    let   company  = useSelector(state => state.company)
+    const company  = useSelector(state => state.company)
     
     const addSelectInteractions = (id, services) => {
         const input     = document.querySelector(`#${id}`)
+        const list 	    = document.querySelector(`#${id}List`)
         const title	    = document.querySelector(`#${id}Title`)
         const dropdown  = document.querySelector(`#${id}Dropdown`)
-        const list 	    = document.querySelector(`#${id}List`)
-        const listItems = document.querySelectorAll(`#${id}Dropdown .dropdown-menu li`)
+        const listItems = document.querySelectorAll(`#${id}Dropdown .dropdown-menu-${id} li`)
     
         title.innerHTML = list.children[1].innerHTML
         input.setAttribute('value', list.children[1].value)
@@ -23,12 +23,12 @@ const Usluga = () => {
     
         dropdown.addEventListener('click', (e) => {
             dropdown.classList.toggle('active')
-            list.classList.toggle('slided')
+            list.classList.toggle(`slided-${id}`)
         })
 
         dropdown.addEventListener('focusout', (e) => {
             dropdown.classList.remove('active')
-            list.classList.remove('slided')
+            list.classList.remove(`slided-${id}`)
         })
         
         Array.from(listItems)
@@ -41,12 +41,11 @@ const Usluga = () => {
     }
 
     useEffect(() => {
-        let   services = []
-        const dropdown = document.querySelector('#usluga')
+        const input = document.querySelector('#usluga')
         
         const fetchData = async () => {
             const responce = await fetch('/db/services.json')
-            services = await responce.json()
+            let services = await responce.json()
             services = services.sort((a, b) => { 
                 if(a.cat_id === b.cat_id) {
                     if(a.name < b.name) { return -1 }
@@ -84,7 +83,9 @@ const Usluga = () => {
             setUslugaListHtml(res)
             // TODO: set defaultValue of input[id="usluga"] as first usluga.object
             // setUsluga(services[0].object)
-            dispatch(loadUsluga(services.find(({object}) => object === dropdown.value)))
+            console.log(services, input.value);
+            
+            dispatch(loadUsluga(services.find(({object}) => object === input.value)))
 
             addSelectInteractions('usluga', services)
         }
@@ -94,16 +95,16 @@ const Usluga = () => {
     }, [company])
 
     return (
-        <div className="dropdown-container" style={{"width": "100%"}}>   
-            <div className="dropdown" id="uslugaDropdown">
-                <div className="select" style={{"display": "table", "width": "95%"}}>
+        <div className="dropdown-container-usluga" style={{"width": "100%"}}>   
+            <div className="dropdown-usluga" id="uslugaDropdown">
+                <div className="select-usluga" style={{"display": "table", "width": "95%"}}>
                     <span id="uslugaTitle">Тип отправления...</span>
                     <div style={{"display": "table-cell", "verticalAlign": "middle", "textAlign": "end"}}>
                         <i className="fa fa-chevron-left"></i>
                     </div>
                 </div>
                 <input id="usluga" type="hidden" defaultValue="53030" />
-                <ul className="dropdown-menu" id="uslugaList">
+                <ul className="dropdown-menu-usluga" id="uslugaList">
                     { ulsugaListHtml }
                 </ul>
             </div>

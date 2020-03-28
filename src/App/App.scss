@@ -22,11 +22,27 @@ body {
 	height: 100%;
 }
 
+.mobile {
+	grid-template-columns: 1fr!important;
+}
+
 .left-panel {
 	display: grid;
 	// grid-template-columns: 1fr 1fr;
 	grid-auto-rows: min-content;
 	padding: 0 2px 0 2px;
+}
+
+.usluga {
+	grid-column: 1/3;
+	display: grid;
+	grid-template-columns: 5fr 15fr 1fr;
+	align-items: center;
+	justify-items: center;
+  
+	div {
+		padding: 1px;
+	}
 }
 
 .under-development {
@@ -74,7 +90,7 @@ body {
 .under-development-button {
 	align-self: end;
 	font-size: 30px;
-	width: 40%;
+	padding: 7px 35px;
 	height: 50px;
 	border: 0;
 	border-radius: 7px;
