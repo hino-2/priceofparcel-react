@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import './style.scss'
 import { printParamsRP, printServicesRP } from "./printParamsAndServicesRP";
-import { showECOM, hideECOM } from '../../actions'
+import { showECOM, hideECOM, setParams } from '../../actions'
 import { getSafe, format } from "../../utils/basic";
 
 const Params = () => {
@@ -25,9 +25,9 @@ const Params = () => {
     }
 
     const handleNiceBorderEffect = (e) => {
-        const objParams = document.querySelector('#objParamsAndServices')
+        const objParams = document.querySelector('.objParamsAndServices')
         const x = e.pageX - objParams.offsetLeft
-        const y = e.pageY - objParams.offsetTop;
+        const y = e.pageY - objParams.offsetTop
         objParams.style.setProperty('--x', `${ x }px`)
         objParams.style.setProperty('--y', `${ y }px`)
     }
@@ -49,7 +49,7 @@ const Params = () => {
 
     }
 
-    const generateParamsJSX = (data) => {
+    const generateRPParamsJSX = (data) => {
         const params = data.object[0].params.filter(item => !['from', 'to', 'service', 'country'].includes(item.id))
         
         if(!params) return
@@ -57,7 +57,7 @@ const Params = () => {
 		if(data.id === 53030) {							// кнопка для ЕКОМа
 			params.push({
 				id : 'btnPVZ',
-				name : 'Показать/скрыть пункты выдачи',
+				name : 'Пункты выдачи',
 				datatype : 99,
 				param : 'btnPVZ'
 			});
@@ -69,7 +69,7 @@ const Params = () => {
         setParamsJSX(paramsInJSX)
     }
 
-    const generateServicesJSX = (data) => {
+    const generateRPServicesJSX = (data) => {
         const services = data.object[0].service
 
         if(!services) return
@@ -80,6 +80,11 @@ const Params = () => {
         setServicesJSX(servicesInJSX)
     }
 
+    const generateCDEKForm = () => {
+        setParamsJSX(<div>CDEK PARAMS PLACEHOLDER</div>)
+        setServicesJSX(<div>CDEK SERVICES PLACEHOLDER</div>)
+    }
+
     useEffect(() => {
         const getParamsAndServicesFromAPI = async (company, usluga) => {
             switch (company) {
@@ -87,12 +92,12 @@ const Params = () => {
                     const responce = await fetch(`https://tariff.pochta.ru/tariff/v1/dictionary?jsontext&object=${usluga}`)
                     const data = await responce.json()
                     if(getSafe(() => data.object[0])) {
-                        generateParamsJSX(data)
-                        generateServicesJSX(data)
+                        generateRPParamsJSX(data)
+                        generateRPServicesJSX(data)
                     }
                     break
                 case "1":
-                    /* CDEK PARAMS FORM */
+                    generateCDEKForm()
                     break
                 default:
                     break
@@ -102,8 +107,8 @@ const Params = () => {
     }, [usluga, company])
 
     useEffect(() => {
-        document.querySelector('#objParamsAndServices').addEventListener('mousemove', handleNiceBorderEffect)
-        return () => document.querySelector('#objParamsAndServices').removeEventListener('mousemove', handleNiceBorderEffect)
+        document.querySelector('.objParamsAndServices').addEventListener('mousemove', handleNiceBorderEffect)
+        return () => document.querySelector('.objParamsAndServices').removeEventListener('mousemove', handleNiceBorderEffect)
     })
 
     return (

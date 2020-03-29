@@ -9,4 +9,4 @@ const placemarkReducer = (state = [], action) => {
     }
 }
 
-export default placemarkReducer;
+export default placemarkReducer

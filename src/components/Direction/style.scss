@@ -241,19 +241,3 @@ LEVEL 1. RESET STYLES
       border-bottom: 1px solid #ccc;
       border-top: 1px solid transparent;
   }
-  
-  .effect-1 ~ .focus-border {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background-color: #0ebeff;
-      transition: 0.4s;
-  }
-  
-  .effect-1:focus ~ .focus-border {
-      /* width: 99%; */
-      width: calc(100% - 4px);
-      transition: 0.4s;
-  }

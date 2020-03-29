@@ -1,6 +1,6 @@
-import React from "react"
-import { format, formatDate, getSafe, replaceAll } from "../../utils/basic"
+import React  from "react"
 import uniqid from "uniqid"
+import { format, formatDate, getSafe, replaceAll } from "../../utils/basic"
 
 const datatype = {
     1 : 'text',

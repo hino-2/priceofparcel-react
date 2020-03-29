@@ -83,7 +83,7 @@ const Usluga = () => {
             setUslugaListHtml(res)
             // TODO: set defaultValue of input[id="usluga"] as first usluga.object
             // setUsluga(services[0].object)
-            console.log(services, input.value);
+            // console.log(services, input.value);
             
             dispatch(loadUsluga(services.find(({object}) => object === input.value)))
 
