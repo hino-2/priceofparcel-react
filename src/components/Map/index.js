@@ -1,17 +1,21 @@
 import React, { useState }           from 'react'
 import { useSelector, useDispatch }  from 'react-redux'
 import { YMaps, Map, ObjectManager } from 'react-yandex-maps' 
+import Message                       from '../Message'
 import { getSafe }                   from '../../utils/basic'
 import { addPlacemark }              from '../../actions'
 import generatePlacemarkFromOPSInfo  from './generatePlacemarkFromOPSInfo'
 import './style.scss'
 
-function YMap () {
-    const [ymaps, setYmaps] = useState({})
+const YMap = () => {
+    const [objectManager, setObjectManager] = useState({})
+    const [ymaps, setYmaps]                 = useState({})
+    const [message, setMessage]             = useState()
     const showEcom          = useSelector(state => state.showEcom)
     const ecomPvz           = useSelector(state => state.ecomPvz)
     const placemarks        = useSelector(state => state.placemarks)
     const dispatch          = useDispatch() 
+    const controls          = ['zoomControl', 'fullscreenControl', 'searchControl']
     let   PVZ               = []
 
     PVZ = showEcom ? [...placemarks, ...ecomPvz] : placemarks
@@ -19,7 +23,7 @@ function YMap () {
     const [mapState, setMapState] = useState({ 
         center: [56.8519, 60.6122], 
         zoom: 4,
-        controls: ['zoomControl', 'fullscreenControl', 'searchControl']
+        controls: controls
     })
 
     // TODO: detect city
@@ -30,39 +34,55 @@ function YMap () {
         setYmaps(ymaps)
     }
 
+    const getAddressByCoords = async ([latitude, longitude]) => {
+        const myGeocoder = ymaps.geocode([latitude, longitude], { json: true, kind: 'house', results: 1 })
+        return myGeocoder.then((res) => getSafe(() => res.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.text))
+    }
+    const getOPSbyAddress = async (address) => {
+        const response = await fetch(`/getOPSByAddress?address=${address}`)
+        const data = await response.json()
+        return data.postoffices[0]
+    }
+    const getOPSInfo = async (index) => {
+        const response = await fetch(`/getOPSInfo?index=${index}`)
+        const info = await response.json()
+        return info
+    }
+    
     const onMapClick = async (e) => {
         const [latitude, longitude] = e.get('coords')
-        
-        const getAddressByCoords = async ([latitude, longitude]) => {
-            const myGeocoder = ymaps.geocode([latitude, longitude], { json: true, kind: 'house', results: 1 })
-            return myGeocoder.then((res) => getSafe(() => res.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.text))
-        }
+
         const address = await getAddressByCoords([latitude, longitude])
-        console.log(address);
-
-        const getOPSbyAddress = async (address) => {
-            const response = await fetch(`/getOPSByAddress?address=${address}`)
-            const data = await response.json()
-            return data.postoffices[0]
+        if(address === '') {
+            setMessage(<Message text="В этом месте нет дома с адресом" level="0"/>)
+            return
         }
+
         const index = await getOPSbyAddress(address)
-        console.log(index) 
-
-        const getOPSInfo = async (index) => {
-            const response = await fetch(`/getOPSInfo?index=${index}`)
-            const info = await response.json()
-            return info
+        if(isNaN(index)) {
+            setMessage(<Message text="Этот адрес не обслуживает ни одно отделение Почты" level="1"/>)
+            return
         }
+
         const info = await getOPSInfo(index)
-        console.log(info)
-        
+        if(getSafe(() => info.code) === '1004') {
+            setMessage(<Message text={`Этот дом обслуживает отделение Почты ${index}, но информацию о нем получить не удалось<br />Попробуйте еще разок`} level="2"/>)
+            return
+        }
+
         const placemark = generatePlacemarkFromOPSInfo(info)
-        console.log(placemark);
         
-        dispatch(addPlacemark(placemark))
+        if(!placemarks.find((item) => item.id === index))
+            dispatch(addPlacemark(placemark))
 
-        // TODO: open balloon & handle when no OPS or no house found 
-
+        setTimeout(() => {
+            setMapState({ 
+                center: [latitude, longitude], 
+                zoom: 15,
+                controls: controls
+            })
+            objectManager.objects.balloon.open(index)
+        }, 100)
     }
 
     return (
@@ -92,8 +112,10 @@ function YMap () {
                         preset: 'islands#blueClusterIcons',
                     }}
                     features={ PVZ }
+                    instanceRef={om => setObjectManager(om)}
                 />
             </Map>
+            { message }
         </YMaps>
     )
 }

@@ -1,0 +1,41 @@
+.message {
+    position: fixed;
+    display: grid;
+    justify-items: center;
+    font-size: 18px;
+    // font-weight: bold;
+    padding: 10px;
+    width: 60%;
+    left: 20%;
+    top: 10%;
+    border-radius: 3px;
+    opacity: 0;
+    z-index: -1;
+    transition: 0.8s all;
+}
+
+.unfade {
+    opacity: 1;
+    z-index: 5;
+    transition: 0.8s all;
+}
+
+.fade {
+    opacity: 0;
+    transition: 0.8s opacity;
+}
+
+.level-0 {
+    background-color: rgb(89, 89, 255);
+    color: white;
+}
+
+.level-1 {
+    background-color: rgb(255, 208, 0);
+    color: black;
+}
+
+.level-2 {
+    background-color: rgb(255, 53, 53);
+    color: white;
+}

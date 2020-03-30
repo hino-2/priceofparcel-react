@@ -5,7 +5,7 @@ const generatePlacemarkFromOPSInfo = (val) => {
         latitude = parseFloat(val["latitude"]),
         longitude = parseFloat(val["longitude"]),
         brand = val["brand-name"] ? val["brand-name"] : "Почта России",
-        desc = val["getto"] ? "<br/>" + val["getto"] : "",
+        desc = val["getto"] ? val["getto"] : "",
         address = getAddress(val),
         worktime = getWorkTime(val)
     
@@ -142,6 +142,7 @@ const logoAndIcon = (brand) => {
 const getBalloonContentFooter = (worktime, index, address) => {
     return `<font size="3"><div>${worktime[0]}<br/>${worktime[1]}<br/>${worktime[2]}<br/>${worktime[3]}<br/>${worktime[4]}<br/>${worktime[5]}<br/>${worktime[6]}<br/></div></font>
                 <div style="width: 100%; text-align: center;"> 
+                <br />
                 <button class="slide" onclick="setDirection('#from', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 15px 1px 0;line-height: 1.5;"> 
                     отсюда 
                 </button> 
@@ -165,15 +166,31 @@ const getBalloonContentFooter = (worktime, index, address) => {
 }
 
 const getBalloonContentHeader = (logo, index, brand) => {
-    return ('<div id="logo" class="logo"><img src="' + logo + '" style="max-height: 80px; max-width: 80px; height: auto; width: auto; vertical-align: middle;"/><div><font size="4"><b>&nbsp;' + index + '<br/>&nbsp;' + brand + '</b></font></div></div>')
+    return `<div id="logo" class="logo-balloon">
+                <img src="${logo}" style="max-height: 80px; max-width: 80px; height: auto; width: auto; vertical-align: middle;"/>
+                <div>
+                    <font size="4">
+                        <b>&nbsp;${index}<br/>&nbsp;${brand}</b>
+                    </font>
+                </div>
+            </div>`
 }
 
 const getBalloonContentBody = (address, desc) => {
-    return ('<font size="3"><div style="margin:10px 0px 10px 0px;">' + address + '</font><font size="2">' + desc + '</div></font>')
+    return `<div style="margin:10px 0px 10px 0px;">
+                <font size="3">${address}</font>
+                <br />
+                <font size="2">${desc}</font>
+            </div>`
 }
 
 const getHintContent = (logo, index, brand, address) => {
-    return ("<div id='logo' class='logo'><img src='" + logo + "' style='max-height: 80px; max-width: 80px; height: auto; width: auto; vertical-align: middle;'/><div><font size='3'>&nbsp;" + index + " " + brand + "<br/>&nbsp;" + address + "</div></font></div>")
+    return `<div id="logo" class="logo-balloon">
+                <img src="${logo}" style="max-height: 80px; max-width: 80px; height: auto; width: auto; vertical-align: middle;" />
+                <div>
+                    <font size="3">&nbsp;${index} ${brand}<br/>&nbsp;${address}</font>
+                </div>
+            </div>`
 }
 
 export default generatePlacemarkFromOPSInfo

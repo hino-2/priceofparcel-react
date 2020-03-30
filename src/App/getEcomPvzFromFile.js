@@ -13,7 +13,7 @@ const getEcomPVZfromFile = async(file) => {
             latitude = parseFloat(val["latitude"]),
             longitude = parseFloat(val["longitude"]),
             brand = val["brand-name"] ? val["brand-name"] : "Почта России",
-            desc = val["getto"] ? "<br/>" + val["getto"] : "",
+            desc = val["getto"] ? val["getto"] : "",
             address = getAddress(val),
             worktime = getWorkTime(val)
         
@@ -54,6 +54,7 @@ const getEcomPVZfromFile = async(file) => {
     })
     return ecomCollection.features
 }
+
 const getWorkTime = (val) => {
     let worktime = val["work-time"] ? val["work-time"] : [
         "пн, открыто: " + getSafe(() => val["working-hours"][0]['begin-worktime']).substring(0, 5) + " - "
@@ -112,6 +113,7 @@ const getWorkTime = (val) => {
     })
     return worktime
 }
+
 const getAddress = (val) => {
     return val['address-source'] ?
     val['region'] + ", " + val['settlement'] + ", " + val['address-source']
@@ -119,6 +121,7 @@ const getAddress = (val) => {
         val["address"]["place"] + ", " + getSafe(() => val["address"]["street"]) + ", " + getSafe(() => val["address"]["house"])
         : val["address"]["region"] + ", " + val["address"]["place"] + ", " + getSafe(() => val["address"]["street"]) + ", " + getSafe(() => val["address"]["house"]))
 }
+
 const logoAndIcon = (brand) => {
     let logo, icon
     switch(brand.toUpperCase()) {
@@ -145,38 +148,45 @@ const logoAndIcon = (brand) => {
     }
     return [logo, icon]
 }
+
 const getBalloonContentFooter = (worktime, index, address) => {
-    return ('<font size="3"><div>' + worktime[0] + '<br>' + worktime[1] + '<br>' + worktime[2] + '<br>' + worktime[3] + '<br>' + worktime[4] + '<br>' + worktime[5] + '<br>' + worktime[6] + '<br></div></font> \
-                <div style="width: 100%; text-align: center;"> \
-                <button class="slide" onclick="setDirection(\'#from\', \'' + index + '\', \'' + address + '\'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 15px 1px 0;line-height: 1.5;"> \
-                    отсюда \
-                </button> \
-                <button class="slide2" onclick="setDirection(\'#to\', \'' + index + '\', \'' + address + '\'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 0 1px 15px; line-height: 1.5;"> \
-                    &nbsp;&nbsp;сюда&nbsp;&nbsp; \
-                </button></div>')
-    // return (
-    //     <div>
-    //         <font size="3">
-    //             <div> {worktime[0]} <br/> {worktime[1]} <br/> {worktime[2]} <br/> {worktime[3]} <br/> {worktime[4]} <br/> {worktime[5]} <br/> {worktime[6]} <br/></div>
-    //         </font> 
-    //         <div style={{"width": "100%", "text-align": "center"}}> 
-    //             <button className="slide" onClick="setDirection(\'#from\', \'' + index + '\', \'' + address + '\'); return false;" style={{"--color": "#2a53d3", "--hover": "#2a53d3", "margin": "5px 15px 1px 0", "line-height": "1.5"}}> 
-    //                 отсюда 
-    //             </button> 
-    //             <button className="slide2" onClick="setDirection(\'#to\', \'' + index + '\', \'' + address + '\'); return false;" style={{"--color": "#2a53d3", "--hover": "#2a53d3", "margin": "5px 0 1px 15px", "line-height": "1.5"}}> 
-    //                 &nbsp;&nbsp;сюда&nbsp;&nbsp; 
-    //             </button>
-    //         </div>
-    //     </div>)
+    return `<font size="3"><div>${worktime[0]}<br/>${worktime[1]}<br/>${worktime[2]}<br/>${worktime[3]}<br/>${worktime[4]}<br/>${worktime[5]}<br/>${worktime[6]}<br/></div></font>
+                <div style="width: 100%; text-align: center;"> 
+                <br />
+                <button class="slide" onclick="setDirection('#from', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 15px 1px 0;line-height: 1.5;"> 
+                    отсюда 
+                </button> 
+                <button class="slide2" onclick="setDirection('#to', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 0 1px 15px; line-height: 1.5;"> 
+                    &nbsp;&nbsp;сюда&nbsp;&nbsp; 
+                </button></div>`
 }
+
 const getBalloonContentHeader = (logo, index, brand) => {
-    return ('<div id="logo" class="logo"><img src="' + logo + '" style="max-height: 80px; max-width: 80px; height: auto; width: auto; vertical-align: middle;"/><div><font size="4"><b>&nbsp;' + index + '<br/>&nbsp;' + brand + '</b></font></div></div>')
+    return `<div id="logo" class="logo-balloon">
+                <img src="${logo}" style="max-height: 80px; max-width: 80px; height: auto; width: auto; vertical-align: middle;"/>
+                <div>
+                    <font size="4">
+                        <b>&nbsp;${index}<br/>&nbsp;${brand}</b>
+                    </font>
+                </div>
+            </div>`
 }
+
 const getBalloonContentBody = (address, desc) => {
-    return ('<font size="3"><div style="margin:10px 0px 10px 0px;">' + address + '</font><font size="2">' + desc + '</div></font>')
+    return `<div style="margin:10px 0 10px">
+                <font size="3">${address}</font>
+                <br />
+                <font size="2">${desc}</font>
+            </div>`
 }
+
 const getHintContent = (logo, index, brand, address) => {
-    return ("<div id='logo' class='logo'><img src='" + logo + "' style='max-height: 80px; max-width: 80px; height: auto; width: auto; vertical-align: middle;'/><div><font size='3'>&nbsp;" + index + " " + brand + "<br/>&nbsp;" + address + "</div></font></div>")
+    return `<div id="logo" class="logo-balloon">
+                <img src="${logo}" style="max-height: 80px; max-width: 80px; height: auto; width: auto; vertical-align: middle;" />
+                <div>
+                    <font size="3">&nbsp;${index} ${brand}<br/>&nbsp;${address}</font>
+                </div>
+            </div>`
 }
 
 export default getEcomPVZfromFile

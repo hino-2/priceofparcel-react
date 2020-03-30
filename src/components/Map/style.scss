@@ -5,3 +5,12 @@
 	height: 100%;
 	box-sizing: border-box;
 }
+
+.logo-balloon {
+    display: table;
+    text-align: left;
+}
+.logo-balloon div { /* для IE8+ */
+	display: table-cell;
+	vertical-align: middle;
+}
