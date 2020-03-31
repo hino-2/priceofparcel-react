@@ -1,6 +1,6 @@
 import { getSafe } from "../utils/basic"
 
-const getEcomPVZfromFile = async(file) => {
+const getEcomPVZfromFile = async (file, setDirection) => {
     let ecomCollection = {
         type: "FeatureCollection",
         features: []
@@ -21,7 +21,7 @@ const getEcomPVZfromFile = async(file) => {
 
         let balloonContentHeader = getBalloonContentHeader(logo, index, brand),
             balloonContentBody = getBalloonContentBody(address, desc),
-            balloonContentFooter = getBalloonContentFooter(worktime, index, address),
+            balloonContentFooter = getBalloonContentFooter(worktime, index, address, setDirection),
             hintContent = getHintContent(logo, index, brand, address)
         
         balloonContentFooter = val['is-temporary-closed'] ? 
@@ -149,14 +149,14 @@ const logoAndIcon = (brand) => {
     return [logo, icon]
 }
 
-const getBalloonContentFooter = (worktime, index, address) => {
+const getBalloonContentFooter = (worktime, index, address, setDirection) => {
     return `<font size="3"><div>${worktime[0]}<br/>${worktime[1]}<br/>${worktime[2]}<br/>${worktime[3]}<br/>${worktime[4]}<br/>${worktime[5]}<br/>${worktime[6]}<br/></div></font>
                 <div style="width: 100%; text-align: center;"> 
                 <br />
-                <button class="slide" onclick="setDirection('#from', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 15px 1px 0;line-height: 1.5;"> 
+                <button class="slide" onclick="setDirection('from', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 15px 1px 0;line-height: 1.5;"> 
                     отсюда 
                 </button> 
-                <button class="slide2" onclick="setDirection('#to', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 0 1px 15px; line-height: 1.5;"> 
+                <button class="slide2" onclick="setDirection('to', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 0 1px 15px; line-height: 1.5;"> 
                     &nbsp;&nbsp;сюда&nbsp;&nbsp; 
                 </button></div>`
 }

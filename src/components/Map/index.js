@@ -1,22 +1,24 @@
-import React, { useState }           from 'react'
+import React, { useState, useEffect }           from 'react'
 import { useSelector, useDispatch }  from 'react-redux'
 import { YMaps, Map, ObjectManager } from 'react-yandex-maps' 
 import Message                       from '../Message'
 import { getSafe }                   from '../../utils/basic'
-import { addPlacemark }              from '../../actions'
+import { addPlacemark, 
+         setDirectionIndexTo,
+         setDirectionIndexFrom }     from '../../actions'
 import generatePlacemarkFromOPSInfo  from './generatePlacemarkFromOPSInfo'
 import './style.scss'
 
 const YMap = () => {
-    const [objectManager, setObjectManager] = useState({})
-    const [ymaps, setYmaps]                 = useState({})
+    const [objectManager, setObjectManager] = useState()
+    const [ymaps, setYmaps]                 = useState()
     const [message, setMessage]             = useState()
-    const showEcom          = useSelector(state => state.showEcom)
-    const ecomPvz           = useSelector(state => state.ecomPvz)
-    const placemarks        = useSelector(state => state.placemarks)
-    const dispatch          = useDispatch() 
-    const controls          = ['zoomControl', 'fullscreenControl', 'searchControl']
-    let   PVZ               = []
+    const showEcom   = useSelector(state => state.showEcom)
+    const ecomPvz    = useSelector(state => state.ecomPvz)
+    const placemarks = useSelector(state => state.placemarks)
+    const dispatch   = useDispatch() 
+    const controls   = ['zoomControl', 'fullscreenControl', 'searchControl']
+    let   PVZ        = []
 
     PVZ = showEcom ? [...placemarks, ...ecomPvz] : placemarks
 
@@ -26,8 +28,28 @@ const YMap = () => {
         controls: controls
     })
 
-    // TODO: detect city
-    //setMapState(newMapState)
+    useEffect(() => {
+        if ("geolocation" in navigator) {
+            // check if geolocation is supported/enabled on current browser
+            navigator.geolocation.getCurrentPosition(
+                function success(position) {
+                    // for when getting location is a success
+                    setMapState({
+                        center: [position.coords.latitude, position.coords.longitude],
+                        zoom: 4,
+                        controls: controls
+                    })
+                },
+                function error(error_message) {
+                    // for when getting location results in an error
+                    console.error('An error has occured while retrieving location', error_message)
+                })
+        } else {
+            // geolocation is not supported
+            // get your location some other way
+            console.log('geolocation is not enabled on this browser')
+        }
+    }, [])
     
     const init = (ymaps) => {
         //ymaps.container.fitToViewport()
@@ -47,6 +69,16 @@ const YMap = () => {
         const response = await fetch(`/getOPSInfo?index=${index}`)
         const info = await response.json()
         return info
+    }
+
+    window.setDirection = (type, index, address) => {
+        if(type === 'from') { 
+            dispatch(setDirectionIndexFrom(index))
+            document.querySelector('#from').value = address
+        } else {
+            dispatch(setDirectionIndexTo(index))
+            document.querySelector('#to').value = address
+        }
     }
     
     const onMapClick = async (e) => {
@@ -70,7 +102,7 @@ const YMap = () => {
             return
         }
 
-        const placemark = generatePlacemarkFromOPSInfo(info)
+        const placemark = generatePlacemarkFromOPSInfo(info, window.setDirection)
         
         if(!placemarks.find((item) => item.id === index))
             dispatch(addPlacemark(placemark))
