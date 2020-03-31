@@ -85,37 +85,47 @@ export const printParamsRP = (param, toggleEcomPvz, handleParamsChange) => {
                         </div> 
                     </div>)
         case 41:		// select
-            return (<div key={uniqid()}>
-                        <label htmlFor={param['param']} 
-                               className="objLabel"
-                               key={uniqid()}>
-                            {param['name']}
-                        </label>
-                        <div className="container" key={uniqid()} style={{"marginBottom": "5px"}}> 
-                            <select id={`${param['param']}`} 
-                                    name={`${param['param']}`}
-                                    className="param"
-                                    key={uniqid()}
-                                    onChange={handleParamsChange}>
-                                {param['list'].map((item) => (<option value={item.id} key={uniqid()}>{item.name}</option>))}
-                            </select>
-                        </div>
-                    </div>)
-                    // TODO: select
-            //                     <div class="dropdown" id="' + param['param'] + 'Dropdown" style="border-radius: 0px; margin-top: 3px;"> \
-            //                         <div class="select" style="padding: 5px 0px 5px 10px; margin: 0;"> \
-            //                             <span id="' + param['param'] + 'Title">' + param['name'] + '</span> \
-            //                             <i class="fa fa-chevron-left"></i> \
-            //                         </div> \
-            //                         <input id="' + param['param'] + '" type="hidden" class="param"> \
-            //                         <ul class="dropdown-menu" id="' + param['param'] + 'List">';
-            // $.each(list, function(key, item) {
-            //     htmlParams += '<li value="' + item['id'] + '">' + item['name'] + '</li>';
-            // });
-            // htmlParams +=  '		</ul> \
-            //                         </div> \
-            
-            // selectInteractions.push(param['param']);
+            return (            
+                <div className="dropdown-container" key={uniqid()}>
+                    <label htmlFor={param['param']} 
+                           className="objLabel"
+                           key={uniqid()}>
+                           {param['name']}
+                    </label>
+                    <div className="dropdown" 
+                         id={`${param['param']}Dropdown`} 
+                         style={{"borderRadius": "0px", "marginTop": "3px"}}
+                         key={uniqid()}>
+                        <div className="select" 
+                             style={{"padding": "5px 0px 5px 10px", "margin": "0"}}
+                             key={uniqid()}> 
+                            <span id={`${param['param']}Title`} key={uniqid()}>{param['name']}</span> 
+                            <div style={{"display": "table-cell", "verticalAlign": "middle", "textAlign": "end"}}>
+                                <i className="fa fa-chevron-left" key={uniqid()}></i> 
+                            </div>
+                        </div> 
+                        <input id={param['param']} type="hidden" className="param" key={uniqid()} /> 
+                        <ul className="dropdown-menu" id={`${param['param']}List`} key={uniqid()}>
+                            {param['list'].map((item) => <li value={item.id} key={uniqid()}>{item.name}</li>)}
+                        </ul>
+                    </div>
+                </div>)                               
+            // return (<div key={uniqid()}>
+            //             <label htmlFor={param['param']} 
+            //                    className="objLabel"
+            //                    key={uniqid()}>
+            //                 {param['name']}
+            //             </label>
+            //             <div className="container" key={uniqid()} style={{"marginBottom": "5px"}}> 
+            //                 <select id={`${param['param']}`} 
+            //                         name={`${param['param']}`}
+            //                         className="param"
+            //                         key={uniqid()}
+            //                         onChange={handleParamsChange}>
+            //                     {param['list'].map((item) => (<option value={item.id} key={uniqid()}>{item.name}</option>))}
+            //                 </select>
+            //             </div>
+            //         </div>)
         case 99:		// ecom button
             // if(!isMobile) 
                 return (<div style={{"paddingRight": "4px"}} key={uniqid()}>
