@@ -1,0 +1,120 @@
+.support {
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  display: table;
+  align-items: center;
+  justify-self: center;
+  padding-top: 5px;
+  background: #b3b3b3;
+}
+
+.contacts {
+  height: 10%;
+  margin-top: 300px;
+
+  font {
+    font-size: 15px;
+    font-weight: bold;
+    color: #2a53d3;
+  }
+}
+
+.donate {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 35vw;
+  height: 100%;
+  background-color: white;
+  z-index: 4;
+}
+
+.buttonclose {
+  background: none;
+  border: 0;
+  box-sizing: border-box;
+  color: transparent;
+  cursor: pointer;
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  line-height: 10px;
+  outline: none;
+  overflow: hidden;
+  padding: 9px 0 7px;
+  position: absolute;
+  text-transform: uppercase;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s ease-in;
+  width: 100px;
+  left: 50%;
+  top: 97%;
+
+  &::before,
+  &::after {
+    background-color: #673ab7;
+    content: "";
+    display: block;
+    height: 1px;
+    left: 0;
+    position: absolute;
+    transform-origin: center left;
+    transition: all 0.2s ease-in;
+    width: 141.4214px;
+    z-index: -1;
+  }
+
+  &::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+  &::after {
+    bottom: 0;
+    transform: rotate(-45deg);
+  }
+
+  &:hover {
+    color: white;
+
+    &::before,
+    &::after {
+      height: 50px;
+      transform: rotate(0deg);
+    }
+  }
+}
+
+#btnDonate {
+  color: var(--color);
+  transition: 0.25s;
+  background: none;
+  border: 2px solid;
+  font: inherit;
+  line-height: 1;
+  margin: 0.5em;
+
+  &:hover,
+  &:focus {
+    border-color: var(--hover);
+    color: #fff;
+  }
+}
+
+.up {
+  --color: #673ab7;
+  --hover: #673ab7;
+
+  &:hover,
+  &:focus {
+    box-shadow: inset 0 -4em 0 0 var(--hover);
+    outline: none;
+  }
+}
+
+#paymentDetails {
+    div  {
+        justify-self: center;
+        align-self: center;
+    }
+}

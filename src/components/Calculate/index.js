@@ -157,6 +157,7 @@ const Calculate = () => {
 
     const mainButtonClick = () => {
         if(company === "0") {
+            if(from === 'не выбрано' || to === 'не выбрано') return
             fetchTariff()
             fetchDelivery()
         }

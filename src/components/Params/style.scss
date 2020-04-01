@@ -459,22 +459,22 @@ LEVEL 4. SETTINGS
   --hover: #1973bc;
 }
 
-button {
+.objParamsAndServices button,
+.balloon-button button {
   color: var(--color);
   transition: 0.25s;
-}
-button:hover, button:focus {
-  border-color: var(--hover);
-  color: #fff;
-}
-
-button {
   background: none;
   border: 2px solid;
   font: inherit;
   line-height: 1;
   margin: 0.5em;
+
+  &:hover, &:focus {
+    border-color: var(--hover);
+    color: #fff;
+  }
 }
+
 /* END OF BUTTONS */
 
 /* SELECT */

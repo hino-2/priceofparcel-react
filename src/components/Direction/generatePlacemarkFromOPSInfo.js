@@ -139,6 +139,27 @@ const logoAndIcon = (brand) => {
     return [logo, icon]
 }
 
+const getBalloonContentFooter = (worktime, index, address) => {
+    return `<font size="3">
+                ${worktime[0]}<br/>
+                ${worktime[1]}<br/>
+                ${worktime[2]}<br/>
+                ${worktime[3]}<br/>
+                ${worktime[4]}<br/>
+                ${worktime[5]}<br/>
+                ${worktime[6]}<br/>
+            </font>
+            <div style="width: 100%; text-align: center;"> 
+                <br />
+                <button class="slide" onclick="setDirection('from', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 15px 1px 0;line-height: 1.5;"> 
+                    отсюда 
+                </button> 
+                <button class="slide2" onclick="setDirection('to', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 0 1px 15px; line-height: 1.5;"> 
+                    &nbsp;&nbsp;сюда&nbsp;&nbsp; 
+                </button>
+            </div>`
+}
+
 const getBalloonContentHeader = (logo, index, brand) => {
     return `<div id="logo" class="logo-balloon">
                 <img src="${logo}" style="max-height: 80px; max-width: 80px; height: auto; width: auto; vertical-align: middle;"/>
@@ -155,27 +176,6 @@ const getBalloonContentBody = (address, desc) => {
                 <font size="3">${address}</font>
                 <br />
                 <font size="2">${desc}</font>
-            </div>`
-}
-
-const getBalloonContentFooter = (worktime, index, address) => {
-    return `<font size="3">
-                ${worktime[0]}<br/>
-                ${worktime[1]}<br/>
-                ${worktime[2]}<br/>
-                ${worktime[3]}<br/>
-                ${worktime[4]}<br/>
-                ${worktime[5]}<br/>
-                ${worktime[6]}<br/>
-            </font>
-            <div style="width: 100%; text-align: center;" class="balloon-button"> 
-                <br />
-                <button class="slide" onclick="setDirection('from', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 15px 1px 0;line-height: 1.5;"> 
-                    отсюда 
-                </button> 
-                <button class="slide2" onclick="setDirection('to', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 0 1px 15px; line-height: 1.5;"> 
-                    &nbsp;&nbsp;сюда&nbsp;&nbsp; 
-                </button>
             </div>`
 }
 

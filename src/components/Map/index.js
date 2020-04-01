@@ -5,14 +5,15 @@ import Message                       from '../Message'
 import { getSafe }                   from '../../utils/basic'
 import { addPlacemark, 
          setDirectionIndexTo,
-         setDirectionIndexFrom }     from '../../actions'
+         setDirectionIndexFrom,
+         setObjectManager }          from '../../actions'
 import generatePlacemarkFromOPSInfo  from './generatePlacemarkFromOPSInfo'
 import './style.scss'
 
 const YMap = () => {
-    const [objectManager, setObjectManager] = useState()
-    const [ymaps, setYmaps]                 = useState()
-    const [message, setMessage]             = useState()
+    const [objManager, setObjManager]    = useState()
+    const [ymaps, setYmaps]              = useState()
+    const [message, setMessage]          = useState()
     const showEcom   = useSelector(state => state.showEcom)
     const ecomPvz    = useSelector(state => state.ecomPvz)
     const placemarks = useSelector(state => state.placemarks)
@@ -23,7 +24,7 @@ const YMap = () => {
     PVZ = showEcom ? [...placemarks, ...ecomPvz] : placemarks
 
     const [mapState, setMapState] = useState({ 
-        center: [56.8519, 60.6122], 
+        center: [59.5594, 150.8128], 
         zoom: 4,
         controls: controls
     })
@@ -83,6 +84,7 @@ const YMap = () => {
     
     const onMapClick = async (e) => {
         const [latitude, longitude] = e.get('coords')
+        setMessage([])
 
         const address = await getAddressByCoords([latitude, longitude])
         if(address === '') {
@@ -98,7 +100,7 @@ const YMap = () => {
 
         const info = await getOPSInfo(index)
         if(getSafe(() => info.code) === '1004') {
-            setMessage(<Message text={`Этот дом обслуживает отделение Почты ${index}, но информацию о нем получить не удалось<br />Попробуйте еще разок`} level="2"/>)
+            setMessage(<Message text={`Информацию об ОПС ${index} получить не удалось. Попробуйте еще разок`} level="2"/>)
             return
         }
 
@@ -108,14 +110,21 @@ const YMap = () => {
             dispatch(addPlacemark(placemark))
 
         setTimeout(() => {
-            setMapState({ 
-                center: [latitude, longitude], 
-                zoom: 15,
-                controls: controls
-            })
-            objectManager.objects.balloon.open(index)
+            // setMapState({ 
+            //     center: [latitude, longitude], 
+            //     zoom: 15,
+            //     controls: controls
+            // })
+            objManager.objects.balloon.open(index)
         }, 100)
     }
+
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         if(objManager !== undefined)
+    //             dispatch(setObjectManager(objManager))
+    //     }, 1000);
+    // }, [objManager])
 
     return (
         <YMaps query={{
@@ -144,7 +153,7 @@ const YMap = () => {
                         preset: 'islands#blueClusterIcons',
                     }}
                     features={ PVZ }
-                    instanceRef={om => setObjectManager(om)}
+                    instanceRef={om => setObjManager(om)}
                 />
             </Map>
             { message }

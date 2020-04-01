@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, 
+                useState } from 'react'
+import { useSelector }     from 'react-redux'
 import './style.scss'
 
 const Help = () => {
+    const isMobile = useSelector(state => state.isMobile)
     const [help, setHelp] = useState('')
 
     const toggleHelp = (e) => {
@@ -24,18 +27,12 @@ const Help = () => {
         else {
             let imgQuestionCoords = document.querySelector('#help_main').getBoundingClientRect()
             
-            help.style.left = `${imgQuestionCoords.x + e.offsetX + 22}px`
-            help.style.top =  `${imgQuestionCoords.y + e.offsetY}px`
+            help.style.height = isMobile ? '-webkit-fill-available' : 'auto'
+            help.style.width  = isMobile ? 'auto' : '700px'
+            help.style.left   = isMobile ? 0 : `${imgQuestionCoords.x + e.offsetX + 22}px`
+            help.style.top    = isMobile ? 0 : `${imgQuestionCoords.y + e.offsetY}px`
             help.classList.add('unfade')
         }
-    
-        // TODO: low width/mobile help
-        // if(low_width) {
-        //     $("#" + helpID).css('left', 0);
-        //     $("#" + helpID).css('top',  0);
-        //     $("#" + helpID).css('max-width',  ($(window).width() - 2) + 'px');
-        //     $("#" + helpID).css('height',  '-webkit-fill-available');
-        // } else {
     }
 
     const fetchHelpFromFile = async () => {
@@ -54,7 +51,7 @@ const Help = () => {
             ['click', 'keydown'].forEach((event) => document.querySelector('body').removeEventListener(event, toggleHelp))
         }
     })
-
+    
     return (
         <>
             <div>

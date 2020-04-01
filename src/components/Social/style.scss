@@ -1,0 +1,82 @@
+.social_button {
+  width: 100%;
+  height: 100%;
+  justify-self: start;
+  background: #f4f4f4;
+  display: table;
+  text-align: center;
+}
+
+.menu {
+  // z-index: 999;
+  position: fixed;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+
+  .submenu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      transition: all ease-in-out 0.5s;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      opacity: 0;
+
+      a {
+        color: #212121;
+
+        &:hover i.fa {
+          color: #fff;
+        }
+
+        &:hover.gmail i.fa {
+          background-color: #ed2442;
+        }
+
+        &:hover.telegram i.fa {
+          background-color: #55acee;
+        }
+
+        &:hover.whatsapp i.fa {
+          background-color: #02b508;
+        }
+      }
+
+      &:nth-child(1) {
+        transform: rotateX(45deg);
+      }
+      &:nth-child(2) {
+        transform: rotateX(90deg);
+      }
+    }
+  }
+
+  .share {
+    &:hover.top .submenu li:nth-child(1) {
+      opacity: 1;
+      top: -31px;
+      transition-delay: 0.08s;
+      transform: rotateY(0deg);
+    }
+    &:hover.top .submenu li:nth-child(2) {
+      opacity: 1;
+      top: -62px;
+      transition-delay: 0.16s;
+      transform: rotateY(0deg);
+    }
+
+    i.fa {
+      height: 30px;
+      width: 30px;
+      text-align: center;
+      line-height: 30px;
+      background-color: #fff;
+      border-radius: 2px;
+    }
+  }
+}

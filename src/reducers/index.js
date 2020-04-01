@@ -8,6 +8,7 @@ import directionIndexReducerFrom from './directrionIndexReducerFrom'
 import directionIndexReducerTo   from './directrionIndexReducerTo'
 import paramsReducer             from './paramsReducer'
 import servicesReducer           from './servicesReducer'
+import objectManagerReducer   from './objectManagerReducer'
 import { combineReducers }       from 'redux'
 
 const allReducers = combineReducers({
@@ -20,7 +21,8 @@ const allReducers = combineReducers({
     params: paramsReducer,
     services: servicesReducer,
     from: directionIndexReducerFrom,
-    to: directionIndexReducerTo
+    to: directionIndexReducerTo,
+    ObjectManager: objectManagerReducer
 })
 
 export default allReducers
