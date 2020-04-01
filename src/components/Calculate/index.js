@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react"
-import uniqid from "uniqid";
+import { useSelector }                from "react-redux"
+import { replaceAll, getSafe }        from "../../utils/basic"
+import uniqid                         from "uniqid"
 import './style.scss'
-import { useSelector } from "react-redux";
-import { replaceAll, getSafe } from "../../utils/basic";
 
 const Calculate = () => {
-    const [tariff,   setTariff]   = useState('')
-    const [delivery, setDelivery] = useState('')
     const [pricingDetails, setPricingDetails] = useState('')
+    const [tariff,   setTariff]               = useState('')
+    const [delivery, setDelivery]             = useState('')
     const company  = useSelector(state => state.company)
     const usluga   = useSelector(state => state.usluga.object)
     const from     = useSelector(state => state.from)
@@ -43,20 +43,16 @@ const Calculate = () => {
         
         let details = document.querySelector('#details')
         if(e.code === 'Escape')  {
-            // details.style.display = 'none'
             details.classList.remove('unfade')
             return
         }
         if(e.target.id !== 'help_price') { 
-            // details.style.display = 'none' 
             details.classList.remove('unfade')
             return
         }
 
-        // let isVisible = window.getComputedStyle(details).display === 'none' ? false : true
         let isVisible = window.getComputedStyle(details).opacity === "0" ? false : true
         if(isVisible) {
-            //details.style.display = 'none'
             details.classList.remove('unfade')
             return
         }
@@ -65,11 +61,10 @@ const Calculate = () => {
             
             details.style.left = `${imgQuestionCoords.x + e.offsetX + 22}px`
             details.style.top =  `${imgQuestionCoords.y + e.offsetY - details.offsetHeight}px`
-            // details.style.display = 'block'
             details.classList.add('unfade')
         }
     
-        // TODO: low width pricing details
+        // TODO: low width/mobile pricing details
         // if(low_width) {
         //     $("#" + helpID).css('left', 0);
         //     $("#" + helpID).css('top',  0);
@@ -93,24 +88,26 @@ const Calculate = () => {
             setTariff([<div key={uniqid()}><font color="red" key={uniqid()}>{data.error['0']}</font></div>]);
             [...document.querySelectorAll('#objParamsAndServices label.objLabel')].forEach((item) => {
                 if(data.error['0']
-                    .replace('вложен', 'sumin')
-                    .replace('дату',   'date')
+                    .replace('стоимость вложен', 'sumin')
+                    .replace('дату', 'date')
                     .search(item.htmlFor) > 0)
                         document.querySelector(`#${item.htmlFor}`).style.border = '1px solid red'
             })
         } else {
             setTariff([<React.Fragment key={uniqid()}>
-                        <font id="actualPrice" color="#2a53d3" size="5" key={uniqid()}>{price} ₽ с НДС</font>
+                        <font id="actualPrice" 
+                              color="#2a53d3" 
+                              size="5" 
+                              key={uniqid()}>
+                            {price} ₽ с НДС
+                        </font>
                         <img id="help_price" 
                              src="img/question-circle-o.svg" 
                              style={{"marginLeft": "5px", "cursor": "pointer"}} 
                              alt="Детали тарификации" 
                              key={uniqid()} />
                        </React.Fragment>])
-            // TODO: check mobile version                       
-            // setTimeout(() => {		                    		     		          // без этого на мобилках по какой то причине аттрибут font.size
-            //     document.querySelector('#actualPrice').innerHTML(price + ' ₽ с НДС') // не всегда усваивался браузером, и текст был size=1
-            // }, 10)
+
             let pricingDetailsJSX = []
             
             data.tariff.forEach((item) => {
@@ -137,26 +134,24 @@ const Calculate = () => {
     }
 
     const fetchDelivery = async () => {
-        let deliveryQuery = `https://delivery.pochta.ru/delivery/v1/calculate?jsontext&object=${usluga}&from=${from}&to=${to}`
-        let responce = await fetch(deliveryQuery)
-        let data = await responce.json()
+        const deliveryQuery = `https://delivery.pochta.ru/delivery/v1/calculate?jsontext&object=${usluga}&from=${from}&to=${to}`
+        const responce = await fetch(deliveryQuery)
+        const data = await responce.json()
         
         if (typeof data.delivery !== 'undefined') {
-            let deliveryMin = parseInt(data.delivery.min)
-            let deliveryMax = parseInt(data.delivery.max)
+            const deliveryMin = parseInt(data.delivery.min)
+            const deliveryMax = parseInt(data.delivery.max)
             setDelivery([<font id="actualDelivery" color="#2a53d3" size="5" key={uniqid()}>
                             {`от ${deliveryMin} до ${deliveryMax} дней`}
-                        </font>])
-            // TODO: check mobile version
-            // setTimeout(function () {																							// без этого на мобилках по какой то ебанутой причине аттрибут font.size
-            //     $('#actualDelivery').html('от ' + deliveryMin + ' до ' + deliveryMax + ' дней'); // не всегда усваивался браузером, и текст был size=1
-            // }, 10);
+                         </font>])
         } else {
-            // TODO: internation package processing
+            // TODO: international package processing
             // if($('#usluga').attr('cat') == 4) {				// если международная
             //     res = '<font color=' + indexColorChoosed + ' size="5">Примерный срок 14 дней</font>';
             // }
-            setDelivery([<div key={uniqid()}><font color="red" key={uniqid()}>{data.error['0']}</font></div>])
+            setDelivery([<div key={uniqid()}>
+                            <font color="red" key={uniqid()}>{data.error['0']}</font>
+                         </div>])
         }
     }
 
@@ -165,14 +160,15 @@ const Calculate = () => {
             fetchTariff()
             fetchDelivery()
         }
+        if(company === "1") {
+            // TODO: CDEK CALCULATE
+        }
     }
 
     useEffect(() => {
-        document.querySelector('body').addEventListener('click', togglePricingDetails)
-        document.querySelector('body').addEventListener('keydown', togglePricingDetails)
+        ['click', 'keydown'].forEach((event) => document.querySelector('body').addEventListener(event, togglePricingDetails))
         return () => { 
-            document.querySelector('body').removeEventListener('click', togglePricingDetails)
-            document.querySelector('body').removeEventListener('keydown', togglePricingDetails)
+            ['click', 'keydown'].forEach((event) => document.querySelector('body').removeEventListener(event, togglePricingDetails))
         }
     })
 

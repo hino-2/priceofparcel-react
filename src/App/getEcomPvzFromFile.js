@@ -1,6 +1,6 @@
 import { getSafe } from "../utils/basic"
 
-const getEcomPVZfromFile = async (file, setDirection) => {
+const getEcomPVZfromFile = async (file) => {
     let ecomCollection = {
         type: "FeatureCollection",
         features: []
@@ -8,21 +8,20 @@ const getEcomPVZfromFile = async (file, setDirection) => {
     let response = await fetch(file)
     let data = await response.json()
     data.forEach(val => {
-        // console.log(JSON.stringify(val));
-        let index = val["postal-code"] ? val["postal-code"] : val["address"]["index"],
-            latitude = parseFloat(val["latitude"]),
+        let index     = val["postal-code"] ? val["postal-code"] : val["address"]["index"],
+            latitude  = parseFloat(val["latitude"]),
             longitude = parseFloat(val["longitude"]),
-            brand = val["brand-name"] ? val["brand-name"] : "Почта России",
-            desc = val["getto"] ? val["getto"] : "",
-            address = getAddress(val),
-            worktime = getWorkTime(val)
+            brand     = val["brand-name"] ? val["brand-name"] : "Почта России",
+            desc      = val["getto"] ? val["getto"] : "",
+            address   = getAddress(val),
+            worktime  = getWorkTime(val)
         
         let [logo, icon] = logoAndIcon(brand)
 
         let balloonContentHeader = getBalloonContentHeader(logo, index, brand),
-            balloonContentBody = getBalloonContentBody(address, desc),
-            balloonContentFooter = getBalloonContentFooter(worktime, index, address, setDirection),
-            hintContent = getHintContent(logo, index, brand, address)
+            balloonContentBody   = getBalloonContentBody(address, desc),
+            balloonContentFooter = getBalloonContentFooter(worktime, index, address),
+            hintContent          = getHintContent(logo, index, brand, address)
         
         balloonContentFooter = val['is-temporary-closed'] ? 
             balloonContentFooter + '<br/><font size="3">Временно закрыто</font>' : balloonContentFooter
@@ -37,9 +36,9 @@ const getEcomPVZfromFile = async (file, setDirection) => {
             properties: {
                 index: index,
                 balloonContentHeader: balloonContentHeader,
-                balloonContentBody: balloonContentBody,
+                balloonContentBody:   balloonContentBody,
                 balloonContentFooter: balloonContentFooter,
-                hintContent: hintContent
+                hintContent:          hintContent
             },
             options: {
                 hintPane: 'hint',
@@ -50,7 +49,6 @@ const getEcomPVZfromFile = async (file, setDirection) => {
             }
         }
         ecomCollection.features.push(yaObject)
-        // console.log(JSON.stringify(yaObject));
     })
     return ecomCollection.features
 }
@@ -116,10 +114,10 @@ const getWorkTime = (val) => {
 
 const getAddress = (val) => {
     return val['address-source'] ?
-    val['region'] + ", " + val['settlement'] + ", " + val['address-source']
-    : (val["address"]["region"] === val["address"]["place"] ?
-        val["address"]["place"] + ", " + getSafe(() => val["address"]["street"]) + ", " + getSafe(() => val["address"]["house"])
-        : val["address"]["region"] + ", " + val["address"]["place"] + ", " + getSafe(() => val["address"]["street"]) + ", " + getSafe(() => val["address"]["house"]))
+            val['region'] + ", " + val['settlement'] + ", " + val['address-source']
+            : (val["address"]["region"] === val["address"]["place"] ?
+                val["address"]["place"] + ", " + getSafe(() => val["address"]["street"]) + ", " + getSafe(() => val["address"]["house"])
+                : val["address"]["region"] + ", " + val["address"]["place"] + ", " + getSafe(() => val["address"]["street"]) + ", " + getSafe(() => val["address"]["house"]))
 }
 
 const logoAndIcon = (brand) => {
@@ -149,16 +147,25 @@ const logoAndIcon = (brand) => {
     return [logo, icon]
 }
 
-const getBalloonContentFooter = (worktime, index, address, setDirection) => {
-    return `<font size="3"><div>${worktime[0]}<br/>${worktime[1]}<br/>${worktime[2]}<br/>${worktime[3]}<br/>${worktime[4]}<br/>${worktime[5]}<br/>${worktime[6]}<br/></div></font>
-                <div style="width: 100%; text-align: center;"> 
+const getBalloonContentFooter = (worktime, index, address) => {
+    return `<font size="3">
+                ${worktime[0]}<br/>
+                ${worktime[1]}<br/>
+                ${worktime[2]}<br/>
+                ${worktime[3]}<br/>
+                ${worktime[4]}<br/>
+                ${worktime[5]}<br/>
+                ${worktime[6]}<br/>
+            </font>
+            <div style="width: 100%; text-align: center;"> 
                 <br />
                 <button class="slide" onclick="setDirection('from', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 15px 1px 0;line-height: 1.5;"> 
                     отсюда 
                 </button> 
                 <button class="slide2" onclick="setDirection('to', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 0 1px 15px; line-height: 1.5;"> 
                     &nbsp;&nbsp;сюда&nbsp;&nbsp; 
-                </button></div>`
+                </button>
+            </div>`
 }
 
 const getBalloonContentHeader = (logo, index, brand) => {

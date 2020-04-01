@@ -1,8 +1,10 @@
-import React from 'react'
-import Parser from 'html-react-parser';
+import React, { useState, useEffect } from 'react'
+import uniqid                         from 'uniqid'
 import './style.scss'
 
 const Title = () => {
+    const [deliveriesJSX, setDeliveriesJSX] = useState([])
+
     const deliveriesList = [
         {
             id: 1,
@@ -18,21 +20,38 @@ const Title = () => {
         }
     ]
 
-    const deliveriesHtml = deliveriesList.reduce((html, item) => {
-        return html += `<a href="${item.href}" target="_blank" rel="noopener noreferrer"><img src="${item.logo}" class="imglogo" alt="${item.name}" /></a>`
-    }, '')
+    const deliveries = deliveriesList.map((item) => 
+        <a href={item.href} 
+           target="_blank" 
+           rel="noopener noreferrer"
+           key={uniqid()}>
+            <img src={item.logo} 
+                 className="imglogo" 
+                 alt={item.name}
+                 key={uniqid()} />
+        </a>
+    )
+
+    useEffect(() => {
+        setDeliveriesJSX(deliveries)
+    }, [])
 
     return (
         <div className="title_wrapper">
             <div className="title">
                 &nbsp;
-                <a href="https://ценапосылки.рф"><img src="/img/logo_cp.png" className="imglogo" alt="Удобный калькулятор стоимости посылки"/></a>
-                <div><a href="https://ценапосылки.рф" style={{"textDecoration": "none"}}><h1>Цена Посылки</h1></a></div>
+                <a href="https://ценапосылки.рф">
+                    <img src="/img/logo_cp.png" className="imglogo" alt="Удобный калькулятор стоимости посылки"/>
+                </a>
+                <div>
+                    <a href="https://ценапосылки.рф" style={{"textDecoration": "none"}}>
+                        <h1>Цена Посылки</h1>
+                    </a>
+                </div>
             </div>
             <div className="title" style={{"justifySelf": "end"}}>
-                { Parser(deliveriesHtml) }
+                { deliveriesJSX }
             </div>
-            <div className="loading" id="loading"></div>
       </div>
     )
 }

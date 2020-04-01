@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import { useSelector } from "react-redux"
-import uniqid from "uniqid"
+import { useSelector }     from "react-redux"
+import uniqid              from "uniqid"
 import './style.scss'
 
 const DirectionIndex = ({ type }) => {

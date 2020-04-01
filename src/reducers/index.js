@@ -1,14 +1,14 @@
-import isMobileReducer from './isMobile'
-import showEcomReducer from './showEcom'
+import isMobileReducer           from './isMobile'
+import showEcomReducer           from './showEcom'
 import getEcomPvzFromFileReducer from './getEcomPvz'
-import placemarkReducer from './placemarkReducer'
-import loadCompanyReducer from './loadCompanyReducer'
-import loadUslugaReducer from './loadUslugaReducer'
-import directionIndexReducerFrom from "./directrionIndexReducerFrom"
-import directionIndexReducerTo from "./directrionIndexReducerTo"
-import paramsReducer from "./paramsReducer"
-import servicesReducer from "./servicesReducer"
-import {combineReducers} from 'redux'
+import placemarkReducer          from './placemarkReducer'
+import loadCompanyReducer        from './loadCompanyReducer'
+import loadUslugaReducer         from './loadUslugaReducer'
+import directionIndexReducerFrom from './directrionIndexReducerFrom'
+import directionIndexReducerTo   from './directrionIndexReducerTo'
+import paramsReducer             from './paramsReducer'
+import servicesReducer           from './servicesReducer'
+import { combineReducers }       from 'redux'
 
 const allReducers = combineReducers({
     isMobile: isMobileReducer,

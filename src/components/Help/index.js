@@ -6,6 +6,7 @@ const Help = () => {
 
     const toggleHelp = (e) => {
         let help = document.querySelector('#helpMainDiv')
+
         if(e.code === 'Escape')  {
             help.classList.remove('unfade')
             return
@@ -28,7 +29,7 @@ const Help = () => {
             help.classList.add('unfade')
         }
     
-        // TODO: low width help
+        // TODO: low width/mobile help
         // if(low_width) {
         //     $("#" + helpID).css('left', 0);
         //     $("#" + helpID).css('top',  0);
@@ -48,11 +49,9 @@ const Help = () => {
     }, [])
 
     useEffect(() => {
-        document.querySelector('body').addEventListener('click', toggleHelp)
-        document.querySelector('body').addEventListener('keydown', toggleHelp)
+        ['click', 'keydown'].forEach((event) => document.querySelector('body').addEventListener(event, toggleHelp))
         return () => { 
-            document.querySelector('body').removeEventListener('click', toggleHelp)
-            document.querySelector('body').removeEventListener('keydown', toggleHelp)
+            ['click', 'keydown'].forEach((event) => document.querySelector('body').removeEventListener(event, toggleHelp))
         }
     })
 

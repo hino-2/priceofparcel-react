@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.scss';
-import App from './App/App';
-import * as serviceWorker from './serviceWorker';
-import { createStore } from 'redux'
-import allReducers from './reducers'
-import { Provider } from 'react-redux'
+import React              from 'react'
+import ReactDOM           from 'react-dom'
+import { createStore }    from 'redux'
+import { Provider }       from 'react-redux'
+import allReducers        from './reducers'
+import App                from './App/App'
+import * as serviceWorker from './serviceWorker'
+import './index.scss'
 
 const store = createStore(allReducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 

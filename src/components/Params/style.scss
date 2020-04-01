@@ -474,14 +474,12 @@ button {
   font: inherit;
   line-height: 1;
   margin: 0.5em;
-  /*padding: 1em 2em;*/
 }
 /* END OF BUTTONS */
 
 /* SELECT */
 .dropdown-container {
   width: 97%;
-  // text-align: center;
   justify-self: start;
 }
 
@@ -495,7 +493,6 @@ button {
   position: relative;
   font-size: 14px;
   color: #474747;
-  // height: 100%;
   text-align: left;
 
   &:hover {

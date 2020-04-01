@@ -87,8 +87,6 @@ const Params = () => {
     }
 
     const addSelectInteractions = (id) => {
-        console.log(id);
-        
         const input     = document.querySelector(`#${id}`)
         const list 	    = document.querySelector(`#${id}List`)
         const title	    = document.querySelector(`#${id}Title`)

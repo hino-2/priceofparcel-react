@@ -102,7 +102,7 @@ const YMap = () => {
             return
         }
 
-        const placemark = generatePlacemarkFromOPSInfo(info, window.setDirection)
+        const placemark = generatePlacemarkFromOPSInfo(info)
         
         if(!placemarks.find((item) => item.id === index))
             dispatch(addPlacemark(placemark))

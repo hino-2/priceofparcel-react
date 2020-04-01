@@ -6,7 +6,6 @@ import { layoutMobile,
          getEcomPvzFromFileAction,
          setDirectionIndexFrom,
          setDirectionIndexTo }        from '../actions'
-import './App.scss'
 import YMap           from '../components/Map'
 import Title          from '../components/Title'
 import CompanyList    from '../components/CompanyList'
@@ -16,6 +15,7 @@ import Params         from "../components/Params"
 import Calculate      from "../components/Calculate"
 import Direction      from '../components/Direction'
 import DirectionIndex from "../components/DirectionIndex"
+import './App.scss'
 
 function App() {
   const dispatch = useDispatch()

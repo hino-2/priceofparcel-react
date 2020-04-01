@@ -1,6 +1,9 @@
-import React  from "react"
-import uniqid from "uniqid"
-import { format, formatDate, getSafe, replaceAll } from "../../utils/basic"
+import React          from "react"
+import uniqid         from "uniqid"
+import { format, 
+         formatDate, 
+         getSafe, 
+         replaceAll } from "../../utils/basic"
 
 const datatype = {
     1 : 'text',
@@ -104,45 +107,28 @@ export const printParamsRP = (param, toggleEcomPvz, handleParamsChange) => {
                                 <i className="fa fa-chevron-left" key={uniqid()}></i> 
                             </div>
                         </div> 
-                        <input id={param['param']} type="hidden" className="param" key={uniqid()} /> 
+                        <input id={param['param']} name={param['param']} type="hidden" className="param" key={uniqid()} /> 
                         <ul className="dropdown-menu" id={`${param['param']}List`} key={uniqid()}>
                             {param['list'].map((item) => <li value={item.id} key={uniqid()}>{item.name}</li>)}
                         </ul>
                     </div>
                 </div>)                               
-            // return (<div key={uniqid()}>
-            //             <label htmlFor={param['param']} 
-            //                    className="objLabel"
-            //                    key={uniqid()}>
-            //                 {param['name']}
-            //             </label>
-            //             <div className="container" key={uniqid()} style={{"marginBottom": "5px"}}> 
-            //                 <select id={`${param['param']}`} 
-            //                         name={`${param['param']}`}
-            //                         className="param"
-            //                         key={uniqid()}
-            //                         onChange={handleParamsChange}>
-            //                     {param['list'].map((item) => (<option value={item.id} key={uniqid()}>{item.name}</option>))}
-            //                 </select>
-            //             </div>
-            //         </div>)
         case 99:		// ecom button
-            // if(!isMobile) 
-                return (<div style={{"paddingRight": "4px"}} key={uniqid()}>
-                            <button className="up" 
-                                    id={param['param']} 
-                                    name={`${param['param']}`}
-                                    key={uniqid()}
-                                    style={{"width": "100%", 
-                                            "height": "53%", 
-                                            "margin": "22px 0px 0px 0px", 
-                                            "padding": "4px 6px 3px 6px",
-                                            "--color": "#2a53d3", 
-                                            "--hover": "#2a53d3"}}
-                                    onClick={() => toggleEcomPvz()}>
-                                {param['name']}
-                            </button>
-                        </div>)
+            return (<div style={{"paddingRight": "4px"}} key={uniqid()}>
+                        <button className="up" 
+                                id={param['param']} 
+                                name={`${param['param']}`}
+                                key={uniqid()}
+                                style={{"width": "100%", 
+                                        "height": "53%", 
+                                        "margin": "22px 0px 0px 0px", 
+                                        "padding": "4px 6px 3px 6px",
+                                        "--color": "#2a53d3", 
+                                        "--hover": "#2a53d3"}}
+                                onClick={() => toggleEcomPvz()}>
+                            {param['name']}
+                        </button>
+                    </div>)
         default:
             return (<div key={uniqid()}>тип {param['datatype']} неопределен</div>)
     }

@@ -1,7 +1,8 @@
-import React from "react"
-import { useDispatch } from "react-redux"
-import { setDirectionIndexFrom, setDirectionIndexTo } from "../../actions";
-import uniqid from "uniqid"
+import React                    from "react"
+import { useDispatch }          from "react-redux"
+import { setDirectionIndexFrom, 
+         setDirectionIndexTo }  from "../../actions";
+import uniqid                   from "uniqid"
 import './style.scss'
 // import { ReactDadata } from "react-dadata"
 
@@ -21,8 +22,7 @@ const Direction = ({ type }) => {
     const handleIndexInput = () => {
         const inputField = document.querySelector(`#${type}`)
 
-        if(isNaN(inputField.value)) return
-        if(inputField.value.length !== 6) return
+        if(isNaN(inputField.value) || inputField.value.length !== 6) return
 
         type === 'from' ? dispatch(setDirectionIndexFrom(inputField.value)) : dispatch(setDirectionIndexTo(inputField.value))
         // TODO: getOPS($('#from_ind').html(), '#from_ind')

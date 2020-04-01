@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch }               from 'react-redux'
+import { useDispatch }                from 'react-redux'
 import { loadCompany }                from '../../actions'
 import uniqid                         from 'uniqid'
 import './style.scss'
@@ -37,10 +37,10 @@ const CompanyList = () => {
         }))
     }
 
-
     useEffect(() => {
         const fetchData = async () => {
             const dropdown  = document.querySelector('#company')
+
             const responce  = await fetch('/db/company.json')
             const companies = await responce.json()
             const companyListJSX = companies.map((item) => 
@@ -56,8 +56,6 @@ const CompanyList = () => {
             addSelectInteractions('company', companies)
         }
         fetchData()
-        
-        // return () => document.querySelector('#companyDropdown').removeEventListener("change", handleChange)
     }, [])
 
     return (
