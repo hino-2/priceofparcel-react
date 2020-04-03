@@ -20,9 +20,10 @@ import './App.scss'
 
 function App() {
   const dispatch = useDispatch()
+  const [objManager, setObjManager] = useState()
   const [isMobile, setIsMobile] = useState(/Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 760)
   const mobileStyleElement = document.querySelector('#mobileStyle')
-  
+
   if(isMobile) {
     if(!mobileStyleElement) {
       let mobileStyle = document.createElement('style')
@@ -64,7 +65,7 @@ function App() {
     window.addEventListener('resize', handleWidthChange)
     return () => window.removeEventListener('resize', handleWidthChange)
   }, [isMobile])
-  
+
   return (
     <div className="app" id="app">
       <div className="left-panel">
@@ -90,15 +91,15 @@ function App() {
         <Params />
         <div>&nbsp;</div>
         <div>&nbsp;</div>
-        <Direction type="from" />
-        <DirectionIndex type="from" />
-        <Direction type="to" />
-        <DirectionIndex type="to" />
+        <Direction type="from" YMapObjectManager={objManager} />
+        <DirectionIndex type="from" YMapObjectManager={objManager} />
+        <Direction type="to" YMapObjectManager={objManager} />
+        <DirectionIndex type="to" YMapObjectManager={objManager} />
         <div>&nbsp;</div>
         <Calculate />
         <Footer />
       </div>
-      { isMobile ? '' : <YMap /> }
+      { isMobile ? '' : <YMap onLoad={om => setObjManager(om)}/> }
     </div>
   )
 }

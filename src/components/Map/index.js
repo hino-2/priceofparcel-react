@@ -1,4 +1,4 @@
-import React, { useState, useEffect }           from 'react'
+import React, { useState, useEffect }from 'react'
 import { useSelector, useDispatch }  from 'react-redux'
 import { YMaps, Map, ObjectManager } from 'react-yandex-maps' 
 import Message                       from '../Message'
@@ -10,7 +10,7 @@ import { addPlacemark,
 import generatePlacemarkFromOPSInfo  from './generatePlacemarkFromOPSInfo'
 import './style.scss'
 
-const YMap = () => {
+const YMap = (onLoad) => {
     const [objManager, setObjManager]    = useState()
     const [ymaps, setYmaps]              = useState()
     const [message, setMessage]          = useState()
@@ -119,12 +119,13 @@ const YMap = () => {
         }, 100)
     }
 
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         if(objManager !== undefined)
-    //             dispatch(setObjectManager(objManager))
-    //     }, 1000);
-    // }, [objManager])
+    useEffect(() => {
+        setTimeout(() => {
+            if(objManager !== undefined) {
+                onLoad.onLoad(objManager)
+            }
+        }, 200)
+    }, [objManager])
 
     return (
         <YMaps query={{
@@ -161,4 +162,4 @@ const YMap = () => {
     )
 }
 
-export default YMap;
+export default YMap

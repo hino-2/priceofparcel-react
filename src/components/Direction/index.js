@@ -10,7 +10,7 @@ import { getSafe }                  from '../../utils/basic'
 import './style.scss'
 // import { ReactDadata } from "react-dadata"
 
-const Direction = ({ type }) => {
+const Direction = ({ type, YMapObjectManager }) => {
     const [message, setMessage] = useState([])
     const dispatch      = useDispatch()
     const placemarks    = useSelector(state => state.placemarks)
@@ -48,10 +48,9 @@ const Direction = ({ type }) => {
             if(!placemarks.find((item) => item.id === inputField.value))
                 dispatch(addPlacemark(placemark))
     
-            // TODO: open balloon on index input
-            // setTimeout(() => {
-            //     objectManager.objects.balloon.open(inputField.value)
-            // }, 100)
+            setTimeout(() => {
+                YMapObjectManager.objects.balloon.open(inputField.value)
+            }, 500)
             type === 'from' ? dispatch(setDirectionIndexFrom(inputField.value)) : dispatch(setDirectionIndexTo(inputField.value))
         }
     }

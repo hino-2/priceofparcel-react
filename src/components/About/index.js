@@ -32,14 +32,12 @@ const About = () => {
         const paymentDetailsElem = document.querySelector('#paymentDetails')
         setPaymentDetailsJSX(paymentDetails.map((item) => 
             <React.Fragment key={uniqid()}>
-                <div key={uniqid()}><font>{item.name}</font></div>
-                <div key={uniqid()}><font>{item.value}</font></div>
-                <div key={uniqid()}>&nbsp;</div>
-                <div key={uniqid()}>&nbsp;</div>
+                <div className="paymentName" key={uniqid()}><font>{item.name}</font></div>
+                <div className="paymentValue" key={uniqid()}><font>{item.value}</font></div>
             </React.Fragment>
         ))
         paymentDetailsElem.style["display"] = 'grid'
-        paymentDetailsElem.style["grid-template-columns"] = '2fr 1fr'
+        paymentDetailsElem.style["grid-template-columns"] = '3fr 2fr'
 
         document.querySelector('#btnDonate').style.display = 'none'
     }
@@ -61,11 +59,11 @@ const About = () => {
                 </font>
             </div>
             <div id="aboutForm" className="donate" style={{"display": "none"}}>
-                <table border="0" height="100%" width="100%" style={{"borderSpacing": "0px"}} className="contacts">
+                <table border="0" className="contacts">
                     <tbody>
                         <tr height="50%">
                             <td align="center" valign="middle">
-                                <div id="paymentDetails" style={{"width": "100%", "height": "100%"}}>
+                                <div id="paymentDetails" className="contact-details">
                                     { paymentDetailsJSX }
                                     <button id="btnDonate"
                                             className="up" 
@@ -77,7 +75,16 @@ const About = () => {
                             </td>
                         </tr>
                         <tr height="45%">
-                            <td align="left" valign="middle" style={{"padding": "10px"}}>
+                            <td align="center" valign="middle" style={{"padding": "10px"}}>
+                                <font>
+                                    Frontend: ReactJS/Redux/SCSS
+                                    <br />
+                                    <br />
+                                    Backend: Express.js
+                                    <br />
+                                    <br />
+                                    APIs: Russian Post/Yandex Maps/DaData/Geolocation
+                                </font>
                             </td>
                         </tr>
                         <tr height="5%">

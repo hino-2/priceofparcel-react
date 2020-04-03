@@ -157,7 +157,7 @@ const getBalloonContentFooter = (worktime, index, address) => {
                 ${worktime[5]}<br/>
                 ${worktime[6]}<br/>
             </font>
-            <div style="width: 100%; text-align: center;"> 
+            <div style="width: 100%; text-align: center;" class="balloon-button"> 
                 <br />
                 <button class="slide" onclick="setDirection('from', '${index}', '${address}'); return false;" style="--color: #2a53d3; --hover: #2a53d3; margin: 5px 15px 1px 0;line-height: 1.5;"> 
                     отсюда 

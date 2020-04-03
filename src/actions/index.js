@@ -84,10 +84,3 @@ export const setDirectionIndexTo = (index) => {
         data: index
     }
 }
-
-export const setObjectManager = (om) => {
-    return {
-        type: "YMAPS_OBJECT_MANAGER",
-        data: om
-    }
-}
