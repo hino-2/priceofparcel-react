@@ -50,15 +50,16 @@
 	box-shadow: 0 0 6px rgba(0,0,0,0.5);
 	max-width: 700px;
 	padding: 5px 10px;
-	z-index: 999;
+	z-index: -1;
 	overflow-y: auto;
 	opacity: 0;
-	transition: 0.4s opacity;
+	transition: 0.4s all;
 }
 
 .unfade {
 	opacity: 1!important;
-	transition: 0.4s opacity;
+	z-index: 5;
+	transition: 0.4s all;
 }
 
 .price {

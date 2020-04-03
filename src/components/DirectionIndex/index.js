@@ -14,7 +14,8 @@ const DirectionIndex = ({ type, YMapObjectManager }) => {
         //     return 
         // }
         if (!isNaN(index)) 
-            YMapObjectManager.objects.balloon.open(index)
+            if(YMapObjectManager !== undefined)
+                YMapObjectManager.objects.balloon.open(index)
     }
 
     return (

@@ -8,6 +8,7 @@ const Calculate = () => {
     const [pricingDetails, setPricingDetails] = useState('')
     const [tariff,   setTariff]               = useState('')
     const [delivery, setDelivery]             = useState('')
+    const isMobile = useSelector(state => state.isMobile)
     const company  = useSelector(state => state.company)
     const usluga   = useSelector(state => state.usluga.object)
     const from     = useSelector(state => state.from)
@@ -59,18 +60,11 @@ const Calculate = () => {
         else {
             let imgQuestionCoords = document.querySelector('#help_price').getBoundingClientRect()
             
-            details.style.left = `${imgQuestionCoords.x + e.offsetX + 22}px`
-            details.style.top =  `${imgQuestionCoords.y + e.offsetY - details.offsetHeight}px`
+            details.style.width = isMobile ? 'calc(100% - 26px)' : 'auto'
+            details.style.left  = isMobile ? 0 : `${imgQuestionCoords.x + e.offsetX + 22}px`
+            details.style.top   = isMobile ? '65%' : `${imgQuestionCoords.y + e.offsetY - details.offsetHeight}px`
             details.classList.add('unfade')
         }
-    
-        // TODO: low width/mobile pricing details
-        // if(low_width) {
-        //     $("#" + helpID).css('left', 0);
-        //     $("#" + helpID).css('top',  0);
-        //     $("#" + helpID).css('max-width',  ($(window).width() - 2) + 'px');
-        //     $("#" + helpID).css('height',  '-webkit-fill-available');
-        // } else {
     }
 
     const fetchTariff = async () => {
@@ -194,6 +188,10 @@ const Calculate = () => {
             <div className="help" id="details" key={uniqid()}>
                 { pricingDetails }
             </div>
+            <div>&nbsp;</div>
+            <div>&nbsp;</div>
+            <div>&nbsp;</div>
+            <div>&nbsp;</div>
         </>
     )
 }

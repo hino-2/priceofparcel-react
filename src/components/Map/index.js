@@ -5,15 +5,14 @@ import Message                       from '../Message'
 import { getSafe }                   from '../../utils/basic'
 import { addPlacemark, 
          setDirectionIndexTo,
-         setDirectionIndexFrom,
-         setObjectManager }          from '../../actions'
+         setDirectionIndexFrom }     from '../../actions'
 import generatePlacemarkFromOPSInfo  from './generatePlacemarkFromOPSInfo'
 import './style.scss'
 
-const YMap = (onLoad) => {
-    const [objManager, setObjManager]    = useState()
-    const [ymaps, setYmaps]              = useState()
-    const [message, setMessage]          = useState()
+const YMap = ({ onLoad }) => {
+    const [objManager, setObjManager] = useState()
+    const [ymaps, setYmaps]           = useState()
+    const [message, setMessage]       = useState()
     const showEcom   = useSelector(state => state.showEcom)
     const ecomPvz    = useSelector(state => state.ecomPvz)
     const placemarks = useSelector(state => state.placemarks)
@@ -122,7 +121,7 @@ const YMap = (onLoad) => {
     useEffect(() => {
         setTimeout(() => {
             if(objManager !== undefined) {
-                onLoad.onLoad(objManager)
+                onLoad(objManager)
             }
         }, 200)
     }, [objManager])
