@@ -5,7 +5,7 @@ import uniqid                         from 'uniqid'
 import './style.scss'
 
 const Usluga = () => {
-    const [ulsugaListHtml, setUslugaListHtml] = useState("")
+    const [ulsugaListJSX, setUslugaListJSX] = useState("")
     // const [usluga, setUsluga] = useState(0)
     const dispatch = useDispatch()
     const company  = useSelector(state => state.company)
@@ -80,7 +80,7 @@ const Usluga = () => {
                                                     {item.name}
                                             </li>
                                 })
-            setUslugaListHtml(res)
+            setUslugaListJSX(res)
             // TODO: set defaultValue of input[id="usluga"] as first usluga.object
             // setUsluga(services[0].object)
             // console.log(services, input.value);
@@ -105,7 +105,7 @@ const Usluga = () => {
                 </div>
                 <input id="usluga" type="hidden" defaultValue="53030" />
                 <ul className="dropdown-menu-usluga" id="uslugaList">
-                    { ulsugaListHtml }
+                    { ulsugaListJSX }
                 </ul>
             </div>
         </div>   																				

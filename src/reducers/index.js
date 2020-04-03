@@ -6,8 +6,7 @@ import loadCompanyReducer        from './loadCompanyReducer'
 import loadUslugaReducer         from './loadUslugaReducer'
 import directionIndexReducerFrom from './directrionIndexReducerFrom'
 import directionIndexReducerTo   from './directrionIndexReducerTo'
-import paramsReducer             from './paramsReducer'
-import servicesReducer           from './servicesReducer'
+import pickUpPointReducer        from './pickUpPointsReducer'
 import { combineReducers }       from 'redux'
 
 const allReducers = combineReducers({
@@ -17,10 +16,9 @@ const allReducers = combineReducers({
     placemarks: placemarkReducer,
     company: loadCompanyReducer,
     usluga: loadUslugaReducer, 
-    params: paramsReducer,
-    services: servicesReducer,
     from: directionIndexReducerFrom,
     to: directionIndexReducerTo,
+    pickUpPoints: pickUpPointReducer
 })
 
 export default allReducers

@@ -1,8 +1,8 @@
-import React, { useEffect, useState }     from "react";
-import { useSelector, useDispatch }       from "react-redux";
-import { printParamsRP, printServicesRP } from "./printParamsAndServicesRP";
-import { showECOM, hideECOM }             from '../../actions'
-import { getSafe, format }                from "../../utils/basic";
+import React, { useEffect, useState }       from "react";
+import { useSelector, useDispatch }         from "react-redux";
+import { printParamsRP, printServicesRP }   from "./printParamsAndServicesRP";
+import { showECOM, hideECOM, pickUpPoints } from '../../actions'
+import { getSafe, format }                  from "../../utils/basic";
 import './style.scss'
 
 const Params = () => {
@@ -121,6 +121,12 @@ const Params = () => {
                     const responce = await fetch(`https://tariff.pochta.ru/tariff/v1/dictionary?jsontext&object=${usluga}`)
                     const data = await responce.json()
                     if(getSafe(() => data.object[0])) {
+                        const pup = data.object[0].params.find((par) => par.id === 'from' && par.list)
+                        if(pup === undefined)
+                            dispatch(pickUpPoints(null))
+                        else    
+                            dispatch(pickUpPoints(pup.list))
+
                         generateRPParamsJSX(data)
                         generateRPServicesJSX(data)
                     }

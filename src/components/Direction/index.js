@@ -7,15 +7,21 @@ import Message                      from '../Message'
 import uniqid                       from 'uniqid'
 // import DadataSuggestions            from "react-dadata-suggestions"
 import $                            from 'jquery'
-import {  }              from 'suggestions-jquery'
+import {  }                         from 'suggestions-jquery'
 import generatePlacemarkFromOPSInfo from './generatePlacemarkFromOPSInfo'
 import { getSafe }                  from '../../utils/basic'
 import './style.scss'
 
 const Direction = ({ type, YMapObjectManager }) => {
-    const [message, setMessage] = useState([])
-    const dispatch      = useDispatch()
-    const placemarks    = useSelector(state => state.placemarks)
+    const [message, setMessage]             = useState([])
+    const [pupJSX, setPupJSX]               = useState([])
+    const [countriesJSX, setCountriesJSX]   = useState([])
+    const dispatch     = useDispatch()
+    const placemarks   = useSelector(state => state.placemarks)
+    const pickUpPoints = useSelector(state => state.pickUpPoints)
+    const countries    = useSelector(state => state.countries)
+
+    type === 'from' ? dispatch(setDirectionIndexFrom('не выбрано')) : dispatch(setDirectionIndexTo('не выбрано'))
 
     const params = {
         title: type === 'from' ? 'Откуда' : 'Куда',
@@ -33,22 +39,23 @@ const Direction = ({ type, YMapObjectManager }) => {
     }
 
     const showOPSonMap = async (index) => {
-        const info = await getOPSInfo(index)
-        setMessage([])
-        if(getSafe(() => info.code) === '1004') {
-            setMessage(<Message text={`Информацию об ОПС ${index} получить не удалось. Попробуйте еще разок`} level="2"/>)
-            return
-        }
+        if(YMapObjectManager !== undefined) {
+            const info = await getOPSInfo(index)
+            setMessage([])
+            if(getSafe(() => info.code) === '1004') {
+                setMessage(<Message text={`Информацию об ОПС ${index} получить не удалось. Попробуйте еще разок`} level="2"/>)
+                return
+            }
 
-        const placemark = generatePlacemarkFromOPSInfo(info)
-        
-        if(!placemarks.find((item) => item.id === index))
-            dispatch(addPlacemark(placemark))
+            const placemark = generatePlacemarkFromOPSInfo(info)
+            
+            if(!placemarks.find((item) => item.id === index))
+                dispatch(addPlacemark(placemark))
 
-        setTimeout(() => {
-            if(YMapObjectManager !== undefined)
+            setTimeout(() => {
                 YMapObjectManager.objects.balloon.open(index)
-        }, 500)
+            }, 500)
+        }
         type === 'from' ? dispatch(setDirectionIndexFrom(index)) : dispatch(setDirectionIndexTo(index))
     }
 
@@ -59,15 +66,86 @@ const Direction = ({ type, YMapObjectManager }) => {
             showOPSonMap(inputField.value)
     }
 
-    useEffect(() => {
-        $(`#${type}`).suggestions({
-            token: "40af0779db25462e591cdad7f7cf999562213b1f",
-            type: "ADDRESS",
-            onSelect: (suggestion) => {
-                handleSuggestionPick(suggestion)
-            }
+    const addSelectInteractions = (type) => {
+        const input     = document.querySelector(`#pup${type}`)
+        const list 	    = document.querySelector(`#pup${type}List`)
+        const title	    = document.querySelector(`#pup${type}Title`)
+        const dropdown  = document.querySelector(`#pup${type}Dropdown`)
+        const listItems = document.querySelectorAll(`#pup${type}Dropdown .dropdown-menu-pup li`)
+    
+        // title.innerHTML = list.children[0].innerHTML
+        // input.setAttribute('value', list.children[0].value)
+        dropdown.setAttribute('tabindex', 1)
+    
+        dropdown.addEventListener('click', (e) => {
+            dropdown.classList.toggle('active')
+            list.classList.toggle('slided-pup')
         })
-    })
+
+        dropdown.addEventListener('focusout', (e) => {
+            dropdown.classList.remove('active')
+            list.classList.remove('slided-pup')
+        })
+        
+        Array.from(listItems)
+             .forEach((item) => item.addEventListener('click', (e) => {		// клик на пункт списка
+                title.innerHTML = e.target.innerHTML
+                input.setAttribute('value', e.target.value)
+                showOPSonMap(e.target.value)
+        }))        
+    }
+
+    useEffect(() => {
+        if(type === 'from' && pickUpPoints) {
+            setPupJSX(pickUpPoints.map((item) => <li value={item.id} key={uniqid()}>{item.name}</li>))
+            setTimeout(() => {
+                addSelectInteractions(type)
+            }, 300)
+
+            return
+        } 
+
+        if(type === 'to' && countries) {
+
+            return
+        }
+
+        setTimeout(() => {
+            // TODO: подсказки подключаются не всегда. ПОЧЕМУ!!!!!!!!!
+            console.log('asd', type);
+            $(`#${type}`).suggestions({
+                token: "40af0779db25462e591cdad7f7cf999562213b1f",
+                type: "ADDRESS",
+                onSelect: (suggestion) => {
+                    handleSuggestionPick(suggestion)
+                }
+            })
+        }, 2000)
+    }, [pickUpPoints])
+
+    if(type === 'from' && pickUpPoints) 
+        return (
+            <div className="dropdown-container-pup" style={{"width": "100%"}}>   
+                <div className="dropdown-pup" id={`pup${type}Dropdown`}>
+                    <div className="select-pup" style={{"display": "table", "width": "95%"}}>
+                        <span id={`pup${type}Title`}>{type === 'from' ? 'Откуда...' : 'Куда...'}</span>
+                        <div style={{"display": "table-cell", "verticalAlign": "middle", "textAlign": "end"}}>
+                            <i className="fa fa-chevron-left"></i>
+                        </div>
+                    </div>
+                    <input id={`pup${type}`} type="hidden" />
+                    <ul className="dropdown-menu-pup" id={`pup${type}List`}>
+                        { pupJSX }
+                    </ul>
+                </div>
+                { message }
+            </div>  
+        )
+
+    if(type === 'to' && countries) 
+        return (
+            <div>countries</div>
+        )
 
     return (
         <div className="directions" key={uniqid()}>
@@ -80,7 +158,6 @@ const Direction = ({ type, YMapObjectManager }) => {
                     placeholder={params.placeholder}
                     key={uniqid()} 
                     onChange={handleTextInput}/> 
-                {/* <DadataSuggestions token="40af0779db25462e591cdad7f7cf999562213b1f" /> */}
                 <span className="a-field__label-wrap" key={uniqid()}> 
                     <span className="a-field__label" key={uniqid()}>
                         <font style={{"color": "#2a53d3", "fontWeight": "bold"}} key={uniqid()}>{params.title}</font>

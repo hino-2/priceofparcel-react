@@ -84,3 +84,10 @@ export const setDirectionIndexTo = (index) => {
         data: index
     }
 }
+
+export const pickUpPoints = (pup) => {
+    return {
+        type: "PICK_UP_POINTS",
+        data: pup
+    }
+}
