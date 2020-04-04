@@ -1,7 +1,8 @@
 import React, { useEffect, useState }       from "react";
 import { useSelector, useDispatch }         from "react-redux";
 import { printParamsRP, printServicesRP }   from "./printParamsAndServicesRP";
-import { showECOM, hideECOM, pickUpPoints } from '../../actions'
+import { showECOM, hideECOM,
+         pickUpPoints, countries }          from '../../actions'
 import { getSafe, format }                  from "../../utils/basic";
 import './style.scss'
 
@@ -120,12 +121,22 @@ const Params = () => {
                 case "0":
                     const responce = await fetch(`https://tariff.pochta.ru/tariff/v1/dictionary?jsontext&object=${usluga}`)
                     const data = await responce.json()
+                    
                     if(getSafe(() => data.object[0])) {
+                        console.log(data.object[0]);
                         const pup = data.object[0].params.find((par) => par.id === 'from' && par.list)
                         if(pup === undefined)
                             dispatch(pickUpPoints(null))
                         else    
                             dispatch(pickUpPoints(pup.list))
+
+                        if(data.object[0].params.find((par) => par.id === 'country' && par.list === 'country')) {
+                            const responce = await fetch('/getCountriesList')
+                            const cntr = await responce.json()
+                            dispatch(countries(cntr.country))
+                        }
+                        else
+                            dispatch(countries(null))
 
                         generateRPParamsJSX(data)
                         generateRPServicesJSX(data)

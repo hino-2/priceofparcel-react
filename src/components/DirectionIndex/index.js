@@ -13,9 +13,8 @@ const DirectionIndex = ({ type, YMapObjectManager }) => {
         //     setIndexColor('red')
         //     return 
         // }
-        if (!isNaN(index)) 
-            if(YMapObjectManager !== undefined)
-                YMapObjectManager.objects.balloon.open(index)
+        if (!isNaN(index) && index.toString().length === 6 && YMapObjectManager !== undefined) 
+            YMapObjectManager.objects.balloon.open(index)
     }
 
     return (

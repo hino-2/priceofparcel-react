@@ -13,15 +13,13 @@ import { getSafe }                  from '../../utils/basic'
 import './style.scss'
 
 const Direction = ({ type, YMapObjectManager }) => {
-    const [message, setMessage]             = useState([])
-    const [pupJSX, setPupJSX]               = useState([])
-    const [countriesJSX, setCountriesJSX]   = useState([])
-    const dispatch     = useDispatch()
+    const [message, setMessage]           = useState([])
+    const [pupJSX, setPupJSX]             = useState([])
+    const [countriesJSX, setCountriesJSX] = useState([])
     const placemarks   = useSelector(state => state.placemarks)
     const pickUpPoints = useSelector(state => state.pickUpPoints)
     const countries    = useSelector(state => state.countries)
-
-    type === 'from' ? dispatch(setDirectionIndexFrom('не выбрано')) : dispatch(setDirectionIndexTo('не выбрано'))
+    const dispatch     = useDispatch()
 
     const params = {
         title: type === 'from' ? 'Откуда' : 'Куда',
@@ -39,7 +37,10 @@ const Direction = ({ type, YMapObjectManager }) => {
     }
 
     const showOPSonMap = async (index) => {
-        if(YMapObjectManager !== undefined) {
+        if(YMapObjectManager === undefined) 
+            return
+        
+        if(index.toString().length === 6) {
             const info = await getOPSInfo(index)
             setMessage([])
             if(getSafe(() => info.code) === '1004') {
@@ -54,7 +55,7 @@ const Direction = ({ type, YMapObjectManager }) => {
 
             setTimeout(() => {
                 YMapObjectManager.objects.balloon.open(index)
-            }, 500)
+            }, 200)
         }
         type === 'from' ? dispatch(setDirectionIndexFrom(index)) : dispatch(setDirectionIndexTo(index))
     }
@@ -62,8 +63,12 @@ const Direction = ({ type, YMapObjectManager }) => {
     const handleTextInput = async () => {
         const inputField = document.querySelector(`#${type}`)
 
-        if(!isNaN(inputField.value) && inputField.value.length === 6) 
-            showOPSonMap(inputField.value)
+        if(isNaN(inputField.value))
+            return
+        if(inputField.value.length !== 6)
+            return
+
+        showOPSonMap(inputField.value)
     }
 
     const addSelectInteractions = (type) => {
@@ -97,22 +102,27 @@ const Direction = ({ type, YMapObjectManager }) => {
 
     useEffect(() => {
         if(type === 'from' && pickUpPoints) {
+            dispatch(setDirectionIndexFrom('не выбрано'))
             setPupJSX(pickUpPoints.map((item) => <li value={item.id} key={uniqid()}>{item.name}</li>))
             setTimeout(() => {
-                addSelectInteractions(type)
+                addSelectInteractions('from')
             }, 300)
 
             return
         } 
 
         if(type === 'to' && countries) {
+            dispatch(setDirectionIndexTo('не выбрано'))
+            setCountriesJSX(countries.map((item) => <li value={item.id} key={uniqid()}>{item.name}</li>))
+            setTimeout(() => {
+                addSelectInteractions('to')
+            }, 300)
 
             return
         }
 
+        type === 'from' ? dispatch(setDirectionIndexFrom('не выбрано')) : dispatch(setDirectionIndexTo('не выбрано'))
         setTimeout(() => {
-            // TODO: подсказки подключаются не всегда. ПОЧЕМУ!!!!!!!!!
-            console.log('asd', type);
             $(`#${type}`).suggestions({
                 token: "40af0779db25462e591cdad7f7cf999562213b1f",
                 type: "ADDRESS",
@@ -121,14 +131,14 @@ const Direction = ({ type, YMapObjectManager }) => {
                 }
             })
         }, 2000)
-    }, [pickUpPoints])
+    }, [pickUpPoints, countries])
 
     if(type === 'from' && pickUpPoints) 
         return (
             <div className="dropdown-container-pup" style={{"width": "100%"}}>   
                 <div className="dropdown-pup" id={`pup${type}Dropdown`}>
                     <div className="select-pup" style={{"display": "table", "width": "95%"}}>
-                        <span id={`pup${type}Title`}>{type === 'from' ? 'Откуда...' : 'Куда...'}</span>
+                        <span id={`pup${type}Title`}>Выберите место сдачи...</span>
                         <div style={{"display": "table-cell", "verticalAlign": "middle", "textAlign": "end"}}>
                             <i className="fa fa-chevron-left"></i>
                         </div>
@@ -144,7 +154,21 @@ const Direction = ({ type, YMapObjectManager }) => {
 
     if(type === 'to' && countries) 
         return (
-            <div>countries</div>
+            <div className="dropdown-container-pup" style={{"width": "100%"}}>   
+                <div className="dropdown-pup" id={`pup${type}Dropdown`}>
+                    <div className="select-pup" style={{"display": "table", "width": "95%"}}>
+                        <span id={`pup${type}Title`}>Выберите страну...</span>
+                        <div style={{"display": "table-cell", "verticalAlign": "middle", "textAlign": "end"}}>
+                            <i className="fa fa-chevron-left"></i>
+                        </div>
+                    </div>
+                    <input id={`pup${type}`} type="hidden" />
+                    <ul className="dropdown-menu-pup" id={`pup${type}List`}>
+                        { countriesJSX }
+                    </ul>
+                </div>
+                { message }
+            </div>  
         )
 
     return (

@@ -25,11 +25,6 @@ const Calculate = () => {
             if (item.className.search('currency') >= 0) res = parseInt(replaceAll(replaceAll(item.value,' ', ''), '.', '')) * 100
 
             return query += `&${item.name}=${res}`
-            // TODO: internation package processing
-            // if($('#usluga option:selected').attr('cat') == 4) {				// если международная
-            //     params += '&country=' + (selCountry == 0 ? $('#country').val() : selCountry);
-            // } else
-            //     params += '&from=' + $from + '&to=' + $to;
         }, '')
     }
 
@@ -71,7 +66,7 @@ const Calculate = () => {
         [...document.querySelectorAll('#objParamsAndServices label.objLabel')].forEach((item) => 
             document.querySelector(`#${item.htmlFor}`).style.border = ''
         )        
-        let tariffQuery = `https://tariff.pochta.ru/tariff/v1/calculate?jsontext&object=${usluga}&from=${from}&to=${to}` 
+        let tariffQuery = `https://tariff.pochta.ru/tariff/v1/calculate?jsontext&object=${usluga}&from=${from}&${to.toString().length === 6 ? 'to' : 'country'}=${to}` 
                             + generateQueryStringFromParams() 
                             + generateQueryStringFromServices()
         let responce = await fetch(tariffQuery)
@@ -128,24 +123,30 @@ const Calculate = () => {
     }
 
     const fetchDelivery = async () => {
-        const deliveryQuery = `https://delivery.pochta.ru/delivery/v1/calculate?jsontext&object=${usluga}&from=${from}&to=${to}`
-        const responce = await fetch(deliveryQuery)
-        const data = await responce.json()
-        
-        if (typeof data.delivery !== 'undefined') {
-            const deliveryMin = parseInt(data.delivery.min)
-            const deliveryMax = parseInt(data.delivery.max)
-            setDelivery([<font id="actualDelivery" color="#2a53d3" size="5" key={uniqid()}>
-                            {`от ${deliveryMin} до ${deliveryMax} дней`}
-                         </font>])
+        if(to.toString().length !== 6) {
+            setDelivery(
+                <font color="#2a53d3" size="5">Примерный срок 14 дней</font>
+            )
         } else {
-            // TODO: international package processing
-            // if($('#usluga').attr('cat') == 4) {				// если международная
-            //     res = '<font color=' + indexColorChoosed + ' size="5">Примерный срок 14 дней</font>';
-            // }
-            setDelivery([<div key={uniqid()}>
-                            <font color="red" key={uniqid()}>{data.error['0']}</font>
-                         </div>])
+            const deliveryQuery = `https://delivery.pochta.ru/delivery/v1/calculate?jsontext&object=${usluga}&from=${from}&to=${to}`
+            const responce = await fetch(deliveryQuery)
+            const data = await responce.json()
+            
+            if (typeof data.delivery !== 'undefined') {
+                const deliveryMin = parseInt(data.delivery.min)
+                const deliveryMax = parseInt(data.delivery.max)
+                setDelivery(
+                    <font id="actualDelivery" color="#2a53d3" size="5" key={uniqid()}>
+                        {`от ${deliveryMin} до ${deliveryMax} дней`}
+                    </font>
+                )
+            } else {
+                setDelivery(
+                    <div key={uniqid()}>
+                        <font color="red" key={uniqid()}>{data.error['0']}</font>
+                    </div>
+                )
+            }
         }
     }
 

@@ -7,6 +7,7 @@ import loadUslugaReducer         from './loadUslugaReducer'
 import directionIndexReducerFrom from './directrionIndexReducerFrom'
 import directionIndexReducerTo   from './directrionIndexReducerTo'
 import pickUpPointReducer        from './pickUpPointsReducer'
+import countriesReducer          from './countriesReducer'
 import { combineReducers }       from 'redux'
 
 const allReducers = combineReducers({
@@ -18,7 +19,8 @@ const allReducers = combineReducers({
     usluga: loadUslugaReducer, 
     from: directionIndexReducerFrom,
     to: directionIndexReducerTo,
-    pickUpPoints: pickUpPointReducer
+    pickUpPoints: pickUpPointReducer,
+    countries: countriesReducer
 })
 
 export default allReducers

@@ -91,3 +91,10 @@ export const pickUpPoints = (pup) => {
         data: pup
     }
 }
+
+export const countries = (cntr) => {
+    return {
+        type: "COUNTRIES",
+        data: cntr
+    }
+}
