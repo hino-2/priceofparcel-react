@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
-import { useSelector }                from "react-redux"
+import { useSelector, useDispatch }   from "react-redux"
 import { replaceAll, getSafe }        from "../../utils/basic"
+import { isLoading }                  from "../../actions"
 import uniqid                         from "uniqid"
 import './style.scss'
 
@@ -13,6 +14,7 @@ const Calculate = () => {
     const usluga   = useSelector(state => state.usluga.object)
     const from     = useSelector(state => state.from)
     const to       = useSelector(state => state.to)
+    const dispatch = useDispatch()
 
     const generateQueryStringFromParams = () => {
         return [...document.querySelectorAll('.param')].reduce((query, item) => {
@@ -153,8 +155,10 @@ const Calculate = () => {
     const mainButtonClick = () => {
         if(company === "0") {
             if(from === 'не выбрано' || to === 'не выбрано') return
+            dispatch(isLoading(true))
             fetchTariff()
             fetchDelivery()
+            dispatch(isLoading(false))
         }
         if(company === "1") {
             // TODO: CDEK CALCULATE

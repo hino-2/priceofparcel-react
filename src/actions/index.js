@@ -98,3 +98,10 @@ export const countries = (cntr) => {
         data: cntr
     }
 }
+
+export const isLoading = (is) => {
+    return {
+        type: is ? 'LOADING' : 'NOT_LOADING'
+    }
+}
+

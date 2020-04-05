@@ -5,7 +5,8 @@ import Message                       from '../Message'
 import { getSafe }                   from '../../utils/basic'
 import { addPlacemark, 
          setDirectionIndexTo,
-         setDirectionIndexFrom }     from '../../actions'
+         setDirectionIndexFrom,
+         isLoading }                 from '../../actions'
 import generatePlacemarkFromOPSInfo  from './generatePlacemarkFromOPSInfo'
 import './style.scss'
 
@@ -82,24 +83,28 @@ const YMap = ({ onLoad }) => {
     }
     
     const onMapClick = async (e) => {
+        dispatch(isLoading(true))
         const [latitude, longitude] = e.get('coords')
         setMessage([])
 
         const address = await getAddressByCoords([latitude, longitude])
         if(address === '') {
             setMessage(<Message text="В этом месте нет дома с адресом" level="0"/>)
+            dispatch(isLoading(false))
             return
         }
 
         const index = await getOPSbyAddress(address)
         if(isNaN(index)) {
             setMessage(<Message text="Этот адрес не обслуживает ни одно отделение Почты" level="1"/>)
+            dispatch(isLoading(false))
             return
         }
 
         const info = await getOPSInfo(index)
         if(getSafe(() => info.code) === '1004') {
             setMessage(<Message text={`Информацию об ОПС ${index} получить не удалось. Попробуйте еще разок`} level="2"/>)
+            dispatch(isLoading(false))
             return
         }
 
@@ -109,12 +114,8 @@ const YMap = ({ onLoad }) => {
             dispatch(addPlacemark(placemark))
 
         setTimeout(() => {
-            // setMapState({ 
-            //     center: [latitude, longitude], 
-            //     zoom: 15,
-            //     controls: controls
-            // })
             objManager.objects.balloon.open(index)
+            dispatch(isLoading(false))
         }, 100)
     }
 
@@ -127,37 +128,39 @@ const YMap = ({ onLoad }) => {
     }, [objManager])
 
     return (
-        <YMaps query={{
-                ns: 'use-load-option',
-                // load: 'Map,Placemark,ObjectManager,objectManager.Balloon,Clusterer,control.SearchControl,control.ZoomControl,control.FullscreenControl,geoObject.addon.balloon',
-                load: 'package.full',
-                apikey: 'bdfba964-3a7d-481c-bef0-29c68a58f464',
-                lang: 'ru_RU'
-            }}>
-            <Map onLoad={ymaps => init(ymaps)}
-                state={ mapState }
-                options={{
-                    autoFitToViewport: 'always',
-                    searchControlProvider: 'yandex#search'
-                }}
-                style={{'width': '100%', 'height': '100%'}}
-                onClick={ onMapClick }>
-                <ObjectManager
+        <div className="ymap">
+            <YMaps query={{
+                    ns: 'use-load-option',
+                    // load: 'Map,Placemark,ObjectManager,objectManager.Balloon,Clusterer,control.SearchControl,control.ZoomControl,control.FullscreenControl,geoObject.addon.balloon',
+                    load: 'package.full',
+                    apikey: 'bdfba964-3a7d-481c-bef0-29c68a58f464',
+                    lang: 'ru_RU'
+                }}>
+                <Map onLoad={ymaps => init(ymaps)}
+                    state={ mapState }
                     options={{
-                        clusterize: true,
+                        autoFitToViewport: 'always',
+                        searchControlProvider: 'yandex#search'
                     }}
-                    objects={{
-                        preset: 'islands#blueDotIcon',
-                    }}
-                    clusters={{
-                        preset: 'islands#blueClusterIcons',
-                    }}
-                    features={ PVZ }
-                    instanceRef={om => setObjManager(om)}
-                />
-            </Map>
-            { message }
-        </YMaps>
+                    style={{'width': '100%', 'height': '100%'}}
+                    onClick={ onMapClick }>
+                    <ObjectManager
+                        options={{
+                            clusterize: true,
+                        }}
+                        objects={{
+                            preset: 'islands#blueDotIcon',
+                        }}
+                        clusters={{
+                            preset: 'islands#blueClusterIcons',
+                        }}
+                        features={ PVZ }
+                        instanceRef={om => setObjManager(om)}
+                    />
+                </Map>
+                { message }
+            </YMaps>
+        </div>
     )
 }
 

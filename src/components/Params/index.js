@@ -2,8 +2,9 @@ import React, { useEffect, useState }       from "react";
 import { useSelector, useDispatch }         from "react-redux";
 import { printParamsRP, printServicesRP }   from "./printParamsAndServicesRP";
 import { showECOM, hideECOM,
-         pickUpPoints, countries }          from '../../actions'
-import { getSafe, format }                  from "../../utils/basic";
+         pickUpPoints, countries, 
+         isLoading }                         from '../../actions'
+import { getSafe, format }                   from "../../utils/basic";
 import './style.scss'
 
 const Params = () => {
@@ -116,6 +117,7 @@ const Params = () => {
     }
 
     useEffect(() => {
+        dispatch(isLoading(true))
         const getParamsAndServicesFromAPI = async (company, usluga) => {
             switch (company) {
                 case "0":
@@ -123,7 +125,6 @@ const Params = () => {
                     const data = await responce.json()
                     
                     if(getSafe(() => data.object[0])) {
-                        console.log(data.object[0]);
                         const pup = data.object[0].params.find((par) => par.id === 'from' && par.list)
                         if(pup === undefined)
                             dispatch(pickUpPoints(null))
@@ -148,6 +149,7 @@ const Params = () => {
                 default:
                     break
             }
+            dispatch(isLoading(false))
         }
         getParamsAndServicesFromAPI(company, usluga)
     }, [usluga, company])

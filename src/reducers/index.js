@@ -8,6 +8,7 @@ import directionIndexReducerFrom from './directrionIndexReducerFrom'
 import directionIndexReducerTo   from './directrionIndexReducerTo'
 import pickUpPointReducer        from './pickUpPointsReducer'
 import countriesReducer          from './countriesReducer'
+import isLoadingReducer          from './isLoadingReducer'
 import { combineReducers }       from 'redux'
 
 const allReducers = combineReducers({
@@ -20,7 +21,8 @@ const allReducers = combineReducers({
     from: directionIndexReducerFrom,
     to: directionIndexReducerTo,
     pickUpPoints: pickUpPointReducer,
-    countries: countriesReducer
+    countries: countriesReducer,
+    isLoading: isLoadingReducer
 })
 
 export default allReducers

@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import uniqid                         from 'uniqid'
+import React, { useState, 
+                useEffect } from 'react'
+import Loading              from '../Loading'        
+import uniqid               from 'uniqid'
 import './style.scss'
 
 const Title = () => {
@@ -51,6 +53,9 @@ const Title = () => {
             </div>
             <div className="title" style={{"justifySelf": "end"}}>
                 { deliveriesJSX }
+            </div>
+            <div className="title">
+                <Loading />
             </div>
       </div>
     )

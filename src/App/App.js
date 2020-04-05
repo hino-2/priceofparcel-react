@@ -19,10 +19,10 @@ import Footer         from '../components/Footer'
 import './App.scss'
 
 function App() {
-  const dispatch = useDispatch()
+  const dispatch                    = useDispatch()
   const [objManager, setObjManager] = useState()
-  const [isMobile, setIsMobile] = useState(/Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 760)
-  const mobileStyleElement = document.querySelector('#mobileStyle')
+  const [isMobile, setIsMobile]     = useState(/Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 760)
+  const mobileStyleElement          = document.querySelector('#mobileStyle')
 
   if(isMobile) {
     if(!mobileStyleElement) {
@@ -99,7 +99,7 @@ function App() {
         <Calculate />
         <Footer />
       </div>
-      { isMobile ? '' : <YMap onLoad={om => setObjManager(om)}/> }
+      { isMobile ? '' : <YMap onLoad={ om => setObjManager(om) }/> }
     </div>
   )
 }
