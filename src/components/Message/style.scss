@@ -9,13 +9,11 @@
     top: 10%;
     border-radius: 3px;
     opacity: 0;
-    z-index: -1;
     transition: 0.8s all;
 }
 
 .unfade {
     opacity: 1;
-    z-index: 5;
     transition: 0.8s all;
 }
 

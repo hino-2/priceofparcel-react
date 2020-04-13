@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch }                from 'react-redux'
+import uniqid                         from 'uniqid'
 import getEcomPvzFromFile             from './getEcomPvzFromFile'
 import { layoutMobile, 
          layoutDesktop, 
@@ -13,14 +14,19 @@ import Usluga         from "../components/Usluga"
 import Help           from "../components/Help"
 import Params         from "../components/Params"
 import Calculate      from "../components/Calculate"
-import Direction      from '../components/Direction'
+import Direction      from '../components/Direction/index'
 import DirectionIndex from "../components/DirectionIndex"
 import Footer         from '../components/Footer'
 import './App.scss'
 
 function App() {
   const dispatch                    = useDispatch()
-  const [objManager, setObjManager] = useState()
+  const [directions, setDirections] = useState([<div style={{gridColumn: "1/3", placeSelf: "center"}} key={uniqid()}>
+                                                  <img src="/img/loadingGif.gif" 
+                                                     alt="Загрузка"
+                                                     style={{"width": "60px", "height": "60px"}}
+                                                     key={uniqid()} /> 
+                                                </div>])
   const [isMobile, setIsMobile]     = useState(/Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 760)
   const mobileStyleElement          = document.querySelector('#mobileStyle')
 
@@ -66,6 +72,16 @@ function App() {
     return () => window.removeEventListener('resize', handleWidthChange)
   }, [isMobile])
 
+  useEffect(() => {
+    if(isMobile)
+      setDirections([
+        <Direction type="from" key={uniqid()} />,
+        <DirectionIndex type="from" key={uniqid()} />,
+        <Direction type="to" key={uniqid()} />,
+        <DirectionIndex type="to" key={uniqid()} />
+      ]) 
+  }, [])
+
   return (
     <div className="app" id="app">
       <div className="left-panel">
@@ -91,15 +107,21 @@ function App() {
         <Params />
         <div>&nbsp;</div>
         <div>&nbsp;</div>
-        <Direction type="from" YMapObjectManager={objManager} />
-        <DirectionIndex type="from" YMapObjectManager={objManager} />
-        <Direction type="to" YMapObjectManager={objManager} />
-        <DirectionIndex type="to" YMapObjectManager={objManager} />
+        { directions }
         <div>&nbsp;</div>
         <Calculate />
         <Footer />
       </div>
-      { isMobile ? '' : <YMap onLoad={ om => setObjManager(om) }/> }
+      { isMobile ? ''
+                 : <YMap onLoad={ om => { 
+                        setDirections([
+                          <Direction type="from" YMapObjectManager={om} key={uniqid()} />,
+                          <DirectionIndex type="from" YMapObjectManager={om} key={uniqid()} />,
+                          <Direction type="to" YMapObjectManager={om} key={uniqid()} />,
+                          <DirectionIndex type="to" YMapObjectManager={om} key={uniqid()} />
+                        ])
+                   }} /> 
+      }
     </div>
   )
 }

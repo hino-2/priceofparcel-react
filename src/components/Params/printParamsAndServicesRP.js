@@ -20,12 +20,12 @@ const datatype = {
 }
 
 export const printParamsRP = (param, toggleEcomPvz, handleParamsChange) => {
-    param['name'] = replaceAll(param['name'], '-', '/');
+    param['name'] = replaceAll(param['name'], '-', '/')
     switch(param['datatype']) {
         case 1: case 2:	case 3:	case 13: case 17: case 29: case 33:
             let unit = '', auxClass = '', auxPadding = '25', defVal = getSafe(() => param['def']);
             if (getSafe(() => param['unit'])[0] === 'грамм') {
-                unit = '(грамм)';
+                unit = '(гр)';
                 defVal = format(defVal);
                 auxClass = 'weight';
                 auxPadding = '25';
@@ -38,7 +38,13 @@ export const printParamsRP = (param, toggleEcomPvz, handleParamsChange) => {
             }
             defVal = param['param'] === 'dogovor' ? "0" : defVal
             return (<div style={{"paddingRight": "4px"}} key={uniqid()}>
-                        <label htmlFor={param['param']} className="objLabel" key={uniqid()}>{param['name']} {unit}</label>
+                        <label htmlFor={param['param']} 
+                               className="objLabel" 
+                               key={uniqid()}>
+                                   {param['name'].replace('отправления', '')
+                                                 .replace('Сумма объявленной ценности', 'ОЦ')
+                                                 .replace('вложений', 'влож.')} {unit}
+                        </label>
                         <div className="col-3" style={{"margin": "0px", "width": "100%"}} key={uniqid()}> 
                             <input type={datatype[param['datatype']]} 
                                    key={uniqid()}

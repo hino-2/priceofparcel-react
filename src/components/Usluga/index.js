@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector, }  from 'react-redux'
+import { useDispatch, useSelector }   from 'react-redux'
 import { loadUsluga }                 from '../../actions'
 import uniqid                         from 'uniqid'
 import './style.scss'
@@ -9,6 +9,9 @@ const Usluga = () => {
     // const [usluga, setUsluga] = useState(0)
     const dispatch = useDispatch()
     const company  = useSelector(state => state.company)
+    let handleDropdownClick    = null
+    let handleDropdownFocusout = null
+    let handleListItemClick    = null
     
     const addSelectInteractions = (id, services) => {
         const input     = document.querySelector(`#${id}`)
@@ -20,24 +23,44 @@ const Usluga = () => {
         title.innerHTML = list.children[1].innerHTML
         input.setAttribute('value', list.children[1].value)
         dropdown.setAttribute('tabindex', 1)
-    
-        dropdown.addEventListener('click', (e) => {
+
+        handleDropdownClick = (e) => {
             dropdown.classList.toggle('active')
             list.classList.toggle(`slided-${id}`)
-        })
+        }
 
-        dropdown.addEventListener('focusout', (e) => {
+        handleDropdownFocusout = (e) => {
             dropdown.classList.remove('active')
             list.classList.remove(`slided-${id}`)
-        })
+        }
+
+        handleListItemClick = (e) => {	
+            title.innerHTML = e.target.innerHTML
+            input.setAttribute('value', e.target.value)
+            dispatch(loadUsluga(services.find(({object}) => object === e.target.value + '')))
+        }
+    
+        dropdown.addEventListener('click', handleDropdownClick)
+        dropdown.addEventListener('focusout', handleDropdownFocusout)
         
         Array.from(listItems)
              .filter ((item) => item.id.search('cat') < 0)
-             .forEach((item) => item.addEventListener('click', (e) => {		// клик на пункт списка
-                title.innerHTML = e.target.innerHTML
-                input.setAttribute('value', e.target.value)
-                dispatch(loadUsluga(services.find(({object}) => object === e.target.value + '')))
-        }))
+             .forEach((item) => item.addEventListener('click', handleListItemClick))
+    }
+
+    const removeSelectInteractions = (id) => {
+        const dropdown  = document.querySelector(`#${id}Dropdown`)
+        const listItems = document.querySelectorAll(`#${id}Dropdown .dropdown-menu-${id} li`)
+
+        if(dropdown) {
+            dropdown.removeEventListener('click', handleDropdownClick)
+            dropdown.removeEventListener('focusout', handleDropdownFocusout)
+        }
+        
+        if(listItems)
+            Array.from(listItems)
+                .filter ((item) => item.id.search('cat') < 0)
+                .forEach((item) => item.removeEventListener('click', handleListItemClick))
     }
 
     useEffect(() => {
@@ -91,7 +114,7 @@ const Usluga = () => {
         }
         fetchData()
 
-        // return () => dropdown.removeEventListener("change", () => handleChange(services))
+        return () => removeSelectInteractions('usluga')
     }, [company])
 
     return (

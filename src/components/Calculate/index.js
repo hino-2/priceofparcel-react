@@ -41,17 +41,17 @@ const Calculate = () => {
         
         let details = document.querySelector('#details')
         if(e.code === 'Escape')  {
-            details.classList.remove('unfade')
+            details.classList.remove('unfade-pricing-details')
             return
         }
         if(e.target.id !== 'help_price') { 
-            details.classList.remove('unfade')
+            details.classList.remove('unfade-pricing-details')
             return
         }
 
         let isVisible = window.getComputedStyle(details).opacity === "0" ? false : true
         if(isVisible) {
-            details.classList.remove('unfade')
+            details.classList.remove('unfade-pricing-details')
             return
         }
         else {
@@ -60,7 +60,7 @@ const Calculate = () => {
             details.style.width = isMobile ? 'calc(100% - 26px)' : 'auto'
             details.style.left  = isMobile ? 0 : `${imgQuestionCoords.x + e.offsetX + 22}px`
             details.style.top   = isMobile ? '65%' : `${imgQuestionCoords.y + e.offsetY - details.offsetHeight}px`
-            details.classList.add('unfade')
+            details.classList.add('unfade-pricing-details')
         }
     }
 

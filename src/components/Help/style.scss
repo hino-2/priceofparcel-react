@@ -9,11 +9,11 @@
 	z-index: -1;
 	overflow-y: auto;
 	opacity: 0;
-	transition: 0.4s opacity;
+	transition: 0.4s all;
 }
 
-.unfade {
+.unfade-help {
     opacity: 1!important;
-    z-index: 1!important;
-	transition: 0.4s opacity, z-index;
+    z-index: 9999;
+	transition: 0.4s all;
 }

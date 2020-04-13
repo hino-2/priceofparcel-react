@@ -11,17 +11,17 @@ const Help = () => {
         let help = document.querySelector('#helpMainDiv')
 
         if(e.code === 'Escape')  {
-            help.classList.remove('unfade')
+            help.classList.remove('unfade-help')
             return
         }
         if(e.target.id !== 'help_main') { 
-            help.classList.remove('unfade')
+            help.classList.remove('unfade-help')
             return
         }
 
         let isVisible = window.getComputedStyle(help).opacity === "0" ? false : true
         if(isVisible) {
-            help.classList.remove('unfade')
+            help.classList.remove('unfade-help')
             return
         }
         else {
@@ -31,7 +31,7 @@ const Help = () => {
             help.style.width  = isMobile ? 'auto' : '700px'
             help.style.left   = isMobile ? 0 : `${imgQuestionCoords.x + e.offsetX + 22}px`
             help.style.top    = isMobile ? 0 : `${imgQuestionCoords.y + e.offsetY}px`
-            help.classList.add('unfade')
+            help.classList.add('unfade-help')
         }
     }
 

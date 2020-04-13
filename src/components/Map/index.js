@@ -14,12 +14,14 @@ const YMap = ({ onLoad }) => {
     const [objManager, setObjManager] = useState()
     const [ymaps, setYmaps]           = useState()
     const [message, setMessage]       = useState()
-    const showEcom   = useSelector(state => state.showEcom)
-    const ecomPvz    = useSelector(state => state.ecomPvz)
-    const placemarks = useSelector(state => state.placemarks)
-    const dispatch   = useDispatch() 
-    const controls   = ['zoomControl', 'fullscreenControl', 'searchControl']
-    let   PVZ        = []
+    const showEcom     = useSelector(state => state.showEcom)
+    const ecomPvz      = useSelector(state => state.ecomPvz)
+    const placemarks   = useSelector(state => state.placemarks)
+    const pickUpPoints = useSelector(state => state.pickUpPoints)
+    const countries    = useSelector(state => state.countries)    
+    const dispatch     = useDispatch() 
+    const controls     = ['zoomControl', 'fullscreenControl', 'searchControl']
+    let   PVZ          = []
 
     PVZ = showEcom ? [...placemarks, ...ecomPvz] : placemarks
 
@@ -73,10 +75,11 @@ const YMap = ({ onLoad }) => {
     }
 
     window.setDirection = (type, index, address) => {
-        if(type === 'from') { 
+        if(type === 'from' && !pickUpPoints) { 
             dispatch(setDirectionIndexFrom(index))
             document.querySelector('#from').value = address
-        } else {
+        } 
+        if(type === 'to' && !countries) { 
             dispatch(setDirectionIndexTo(index))
             document.querySelector('#to').value = address
         }
@@ -120,11 +123,8 @@ const YMap = ({ onLoad }) => {
     }
 
     useEffect(() => {
-        setTimeout(() => {
-            if(objManager !== undefined) {
-                onLoad(objManager)
-            }
-        }, 200)
+        if(objManager !== undefined) 
+            onLoad(objManager)
     }, [objManager])
 
     return (
